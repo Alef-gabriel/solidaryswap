@@ -1,2 +1,18 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script>
+//   import Gun from "gun";
+
+//   let gun = Gun("http://localhost:8765/gun");
+//   gun.get("mark").put({
+//     name: "Mark",
+//     email: "mark@gun.eco",
+//   });
+
+//   gun.get("mark").on((data, key) => {
+//     console.log("realtime updates:", data);
+//   });
+//   setInterval(() => {
+//     gun.get("mark").get("live").put(Math.random());
+//   }, 9);
+</script>
+
+<h1 class="h-1 text-blue-600">Welcome to SvelteKit</h1>
