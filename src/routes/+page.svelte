@@ -1,6 +1,8 @@
 <script>
 //   import Gun from "gun";
 
+  import MainNavBar from "$lib/MainNavBar.svelte";
+
 //   let gun = Gun("http://localhost:8765/gun");
 //   gun.get("mark").put({
 //     name: "Mark",
@@ -15,4 +17,4 @@
 //   }, 9);
 </script>
 
-<h1 class="h-1 text-blue-600">Welcome to SvelteKit</h1>
+<MainNavBar/>

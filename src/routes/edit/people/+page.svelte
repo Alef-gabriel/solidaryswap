@@ -67,22 +67,24 @@
     </button>
   </div>
 </div>
-<hr>
+<hr />
 <div class="flex gap-16 w-full h-86 items-center justify-center p-8">
-	<div class="w-2/6 p-8">
-	  <h2 class="text-xl pb-4">Collaborators (optional)</h2>
-	  <p class="text-gray-400 text-sm">
-		If you're working with others, you can grant them permission to edit this project, communicate with backers, and coordinate reward fulfillment.
-	  </p>
-	</div>
-	<div class="flex flex-col gap-4 w-2/4">
-	  <button
-		class="bg-gray-300 hover:bg-gray-500 border py-2 px-4 w-full flex items-center justify-center gap-2"
-	  >
-		Add your first collaborators
-	  </button>
-	</div>
+  <div class="w-2/6 p-8">
+    <h2 class="text-xl pb-4">Collaborators (optional)</h2>
+    <p class="text-gray-400 text-sm">
+      If you're working with others, you can grant them permission to edit this
+      project, communicate with backers, and coordinate reward fulfillment.
+    </p>
   </div>
+  <div class="flex flex-col gap-4 w-2/4">
+    <button
+      class="bg-gray-300 hover:bg-gray-500 border py-2 px-4 w-full flex items-center justify-center gap-2"
+    >
+      Add your first collaborators
+    </button>
+  </div>
+</div>
+
 <style>
   #pic-next {
     background-image: url("$lib/images/link.png");
