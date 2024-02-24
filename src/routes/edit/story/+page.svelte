@@ -3,6 +3,22 @@
   import { browser } from "$app/environment";
   import MainProjectNavBar from "$lib/MainProjectNavBar.svelte";
   import EditProjectNavBar from "$lib/EditProjectNavBar.svelte";
+  import type { FAQs } from "$lib/types/faqs";
+  import { writable, type Writable } from "svelte/store";
+
+  let faqs: Writable<FAQs[]> = writable([]);
+
+  function addNewFAQ() {
+    faqs.update((existingFAQs) => {
+      return [...existingFAQs, { question: "", answer: "" }];
+    });
+  }
+
+  function removeFAQ(index: number) {
+    faqs.update((existingFAQs) => {
+      return existingFAQs.filter((_, i) => i !== index);
+    });
+  }
 
   export let toolbarOptions = [
     [{ header: 1 }, { header: 2 }, "blockquote", "link", "image", "video"],
@@ -75,20 +91,64 @@
     />
   </div>
 </div>
-<hr>
+<hr />
 <div class="flex gap-16 w-full h-86 p-8">
-	<div class="w-1/4 items-center">
-	  <h2 class="text-xl pb-4">Frequently Asked Questions</h2>
-	  <p class="text-gray-400 text-sm">
-		Post answers to frequently asked questions
-	  </p>
-	</div>
-	<div class="flex items-center gap-8 w-3/4 justify-center">
-	  <button
-		class="w-3/4 p-3 bg-white border focus:outline-none resize-none hover:border-gray-900 "
-	  >Add another FAQ</button>
-	</div>
+  <div class="w-1/4 items-center">
+    <h2 class="text-xl pb-4">Frequently Asked Questions</h2>
+    <p class="text-gray-400 text-sm">
+      Post answers to frequently asked questions
+    </p>
   </div>
+  <div class="flex flex-col items-center gap-4 w-3/4 justify-center">
+    {#if $faqs.length > 0}
+      {#each $faqs as faq, index}
+        <div class="flex flex-col gap-8 w-3/4 border p-6 h-4/4 bg-gray-100">
+          <div>
+            <label for="title" class="block mb-2 text-sm font-medium"
+              >Question</label
+            >
+            <input
+              type="text"
+              id="subtitle"
+              placeholder="nothing...."
+              bind:value={faq.question}
+              class="w-full p-2 bg-white border focus:outline-none"
+            />
+          </div>
+          <div>
+            <label for="subtitle" class="block mb-2 text-sm font-medium"
+              >Answer</label
+            >
+            <textarea
+              id="subtitle"
+              placeholder="nothing...."
+              bind:value={faq.answer}
+              class="w-full p-4 bg-white border focus:outline-none resize-none"
+            />
+          </div>
+          <div class="w-full flex justify-end">
+            <button
+              on:click={() => {
+                removeFAQ(index);
+              }}
+              class="bg-white border text-sm text-gray-600 h-8 w-1/6 flex items-center justify-center gap-2"
+            >
+              <div id="pic-trash"></div>
+              Delete
+            </button>
+          </div>
+        </div>
+      {/each}
+    {/if}
+    <button
+      class="w-3/4 p-3 bg-white border focus:outline-none resize-none hover:border-gray-900"
+      on:click={() => {
+        addNewFAQ();
+      }}>Add another FAQ</button
+    >
+  </div>
+</div>
+
 <style>
   @import "https://cdn.quilljs.com/1.3.6/quill.snow.css";
 
@@ -102,5 +162,13 @@
     background-size: cover;
     width: 46px;
     height: 46px;
+  }
+
+  #pic-trash {
+    background-image: url("$lib/images/trash.png");
+    background-position: center;
+    background-size: cover;
+    width: 16px;
+    height: 16px;
   }
 </style>
