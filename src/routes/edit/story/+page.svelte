@@ -60,23 +60,35 @@
 </div>
 <hr />
 <div class="flex gap-16 w-full h-86 p-8">
-    <div class="w-1/4 items-center">
-      <h2 class="text-xl pb-4">Risks and challenges</h2>
-      <p class="text-gray-400 text-sm">
-        Be honest about the potential risks and challenges of this project and how you plan to overcome them to complete it.
-      </p>
-    </div>
-    <div class="flex items-center gap-8 w-3/4 justify-center">
-
-        <textarea
-          id="subtitle"
-          placeholder="nothing...."
-          class="w-3/4 p-4 bg-white border focus:outline-none resize-none"
-        />
-
-    </div>
+  <div class="w-1/4 items-center">
+    <h2 class="text-xl pb-4">Risks and challenges</h2>
+    <p class="text-gray-400 text-sm">
+      Be honest about the potential risks and challenges of this project and how
+      you plan to overcome them to complete it.
+    </p>
+  </div>
+  <div class="flex items-center gap-8 w-3/4 justify-center">
+    <textarea
+      id="subtitle"
+      placeholder="nothing...."
+      class="w-3/4 p-4 bg-white border focus:outline-none resize-none"
+    />
+  </div>
 </div>
-
+<hr>
+<div class="flex gap-16 w-full h-86 p-8">
+	<div class="w-1/4 items-center">
+	  <h2 class="text-xl pb-4">Frequently Asked Questions</h2>
+	  <p class="text-gray-400 text-sm">
+		Post answers to frequently asked questions
+	  </p>
+	</div>
+	<div class="flex items-center gap-8 w-3/4 justify-center">
+	  <button
+		class="w-3/4 p-3 bg-white border focus:outline-none resize-none hover:border-gray-900 "
+	  >Add another FAQ</button>
+	</div>
+  </div>
 <style>
   @import "https://cdn.quilljs.com/1.3.6/quill.snow.css";
 
