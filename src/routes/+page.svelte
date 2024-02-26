@@ -17,4 +17,4 @@
 //   }, 9);
 </script>
 
-<MainNavBar/>
+<MainNavBar isOnEditPage={false}/>

@@ -6,7 +6,7 @@
   let changePassword = false;
 </script>
 
-<MainNavBar />
+<MainNavBar isOnEditPage={false}/>
 <div class="w-full border-b items-center">
   <div class="w-full flex items-center p-8">
     <h1 class="text-5xl">Settings</h1>

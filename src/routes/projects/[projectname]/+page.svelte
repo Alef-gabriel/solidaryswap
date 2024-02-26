@@ -3,7 +3,7 @@
   import StoryNavBar from "$lib/StoryNavBar.svelte";
 </script>
 
-<MainNavBar />
+<MainNavBar isOnEditPage={false}/>
 <div class="bg-gray-50 flex flex-col">
   <div class="flex flex-col justify-center p-8 items-center w-full h-36">
     <h1 class="text-3xl pb-4">
