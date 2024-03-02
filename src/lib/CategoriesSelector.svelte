@@ -1,19 +1,15 @@
-<script lang="ts">
+<script>
   import { businessAreas } from "$lib";
-  import { type Writable } from "svelte/store";
 
-  export let selectedCategory: Writable<{
-    name: string;
-    subAreas: string[];
-  }>;
-  export let selectedSubcategory: string;
-  export let label:string;
+  export let selectedCategory;
+  export let selectedSubcategory
+  export let label
 
-  function setSubcategory(subCategory: string) {
+  function setSubcategory(subCategory) {
     selectedSubcategory = subCategory;
   }
 
-  function setCategory(category: { name: string; subAreas: string[] }) {
+  function setCategory(category) {
     selectedCategory.set(category);
   }
 </script>

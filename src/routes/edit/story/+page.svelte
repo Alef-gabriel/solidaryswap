@@ -1,12 +1,11 @@
-<script lang="ts">
+<script>
   import { onMount } from "svelte";
   import { browser } from "$app/environment";
   import MainProjectNavBar from "$lib/MainProjectNavBar.svelte";
   import EditProjectNavBar from "$lib/EditProjectNavBar.svelte";
-  import type { FAQs } from "$lib/types/faqs";
-  import { writable, type Writable } from "svelte/store";
+  import { writable } from "svelte/store";
 
-  let faqs: Writable<FAQs[]> = writable([]);
+  let faqs = writable([]);
 
   function addNewFAQ() {
     faqs.update((existingFAQs) => {
@@ -14,7 +13,7 @@
     });
   }
 
-  function removeFAQ(index: number) {
+  function removeFAQ(index) {
     faqs.update((existingFAQs) => {
       return existingFAQs.filter((_, i) => i !== index);
     });

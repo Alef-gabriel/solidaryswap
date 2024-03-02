@@ -1,17 +1,13 @@
-<script lang="ts">
+<script>
   import CategoriesSelector from "$lib/CategoriesSelector.svelte";
   import EditProjectNavBar from "$lib/EditProjectNavBar.svelte";
   import MainProjectNavBar from "$lib/MainProjectNavBar.svelte";
-  import { writable, type Writable } from "svelte/store";
+  import { writable} from "svelte/store";
 
-  let principalSelectedCategory: Writable<{
-    name: string;
-    subAreas: string[];
-  }> = writable();
-  let principalSelectedSubCategory: string = "";
-  let selectedCategory: Writable<{ name: string; subAreas: string[] }> =
-    writable();
-  let selectedSubCategory: string = "";
+  let principalSelectedCategory = writable();
+  let principalSelectedSubCategory = "";
+  let selectedCategory = writable();
+  let selectedSubCategory = "";
 </script>
 
 <MainProjectNavBar />

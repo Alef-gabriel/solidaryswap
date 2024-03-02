@@ -1,8 +1,10 @@
-<script lang="ts">
+<script>
   import { businessAreas } from "$lib";
   import MainNavBar from "$lib/MainNavBar.svelte";
 
-  function showFilter(id: string) {
+  export let data;
+
+  function showFilter(id) {
     const targetElement = document.getElementById(id);
     if (targetElement) {
       targetElement.hidden = !targetElement.hidden;
@@ -49,33 +51,42 @@
   </div>
   <div class="flex flex-col gap-2 p-4 w-3/4">
     <!-- each in projects to get all -->
-    <a href="#">
-      <div class="flex items-start p-4 shadow">
-        <div id="pic-bunner"></div>
-        <div class="flex flex-col justify-center pl-4 items-center w-3/4">
-          <h1 class="text-2xl pb-2 font-semibold">
-            Combat Banes and Boons 2, Crits for Ampersand Fantasy RPGs
-          </h1>
-          <p class="text-gray-400 text-sm">
-            Drive your ampersand RPG players wild with these new critical
-            success and failure cards. Designed by Lex Morgan and Philip Reed.
-          </p>
-        </div>
-        <div
-          class="flex flex-col w-1/4 border-l-2 gap-1 p-2 h-full border-violet-400"
-        >
-          <h2 class="text-xl text-violet-600 font-semibold">
-            US$ 1,745 pledged
-          </h2>
-          <p class="text-gray-400 text-sm">148% funded</p>
-          <a href="#" class="text-violet-500 text-sm underline">Video Games</a>
-          <div class="flex gap-1">
-            <div id="pic-location"></div>
-            <p class="text-violet-400 text-sm underline">Sao Paulo, Brazil</p>
+    {#if data}
+      {#each data.projects as project}
+        <a href="#">
+          <div class="flex items-start p-4 shadow">
+            <div id="pic-bunner"></div>
+            <div class="flex flex-col justify-center pl-4 items-center w-3/4">
+              <h1 class="text-2xl pb-2 font-semibold">
+                {project.title}
+              </h1>
+              <p class="text-gray-400 text-sm">
+                Drive your ampersand RPG players wild with these new critical
+                success and failure cards. Designed by Lex Morgan and Philip
+                Reed.
+              </p>
+            </div>
+            <div
+              class="flex flex-col w-1/4 border-l-2 gap-1 p-2 h-full border-violet-400"
+            >
+              <h2 class="text-xl text-violet-600 font-semibold">
+                US$ 1,745 pledged
+              </h2>
+              <p class="text-gray-400 text-sm">148% funded</p>
+              <a href="#" class="text-violet-500 text-sm underline"
+                >Video Games</a
+              >
+              <div class="flex gap-1">
+                <div id="pic-location"></div>
+                <p class="text-violet-400 text-sm underline">
+                  Sao Paulo, Brazil
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </a>
+        </a>
+      {/each}
+    {/if}
   </div>
 </div>
 

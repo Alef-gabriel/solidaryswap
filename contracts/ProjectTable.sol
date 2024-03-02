@@ -12,7 +12,7 @@ contract ProjectTable is ERC721Holder {
     string private constant _TABLE_PREFIX = "table_attributes"; // Custom table prefix
     //auto_increment
     //Houdini graphql
-    constructor() payable {
+    constructor() {
         _createTable();
     }
 
