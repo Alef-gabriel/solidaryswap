@@ -7,11 +7,11 @@ const privateKey =
   "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
 const provider = getDefaultProvider("http://127.0.0.1:8545");
 
-describe("ProjectTable", function () {
+describe("ProjectsTable", function () {
   it("creates the first table id", async function () {
     const wallet = new Wallet(privateKey, provider);
     const contractFactory = await hre.ethers.getContractFactory(
-      "ProjectTable",
+      "ProjectsTable",
       wallet
     );
     const deployed = await contractFactory.deploy();
@@ -21,7 +21,7 @@ describe("ProjectTable", function () {
   it("creates the table with the correct name", async function () {
     const wallet = new Wallet(privateKey, provider);
     const contractFactory = await hre.ethers.getContractFactory(
-      "ProjectTable",
+      "ProjectsTable",
       wallet
     );
     const contract = await contractFactory.deploy();
@@ -34,7 +34,7 @@ describe("ProjectTable", function () {
   it("insert in the table with the correct schema", async function () {
     const wallet = new Wallet(privateKey, provider);
     const contractFactory = await hre.ethers.getContractFactory(
-      "ProjectTable",
+      "ProjectsTable",
       wallet
     );
     const contract = await contractFactory.deploy();
@@ -56,7 +56,7 @@ describe("ProjectTable", function () {
   it("insert in the table delete the data", async function () {
     const wallet = new Wallet(privateKey, provider);
     const contractFactory = await hre.ethers.getContractFactory(
-      "ProjectTable",
+      "ProjectsTable",
       wallet
     );
     const contract = await contractFactory.deploy();
