@@ -12,6 +12,7 @@
 	"devDependencies": {
 		"@nomicfoundation/hardhat-toolbox": "^2.0.0",
 		"@sveltejs/adapter-auto": "^3.0.0",
+		"@sveltejs/adapter-static": "^3.0.1",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"autoprefixer": "^10.4.17",
@@ -33,6 +34,7 @@
 		"@types/quill": "^2.0.14",
 		"@web3-storage/w3up-client": "^12.4.1",
 		"arweave": "^1.14.4",
+		"dotenv": "^16.4.5",
 		"ethers": "^5.7.2",
 		"gun": "^0.2020.1239",
 		"hardhat": "^2.20.1",
