@@ -6,7 +6,7 @@ import {ERC721Holder} from "@openzeppelin/contracts/token/ERC721/utils/ERC721Hol
 import {TablelandDeployments} from "@tableland/evm/contracts/utils/TablelandDeployments.sol";
 import {SQLHelpers} from "@tableland/evm/contracts/utils/SQLHelpers.sol";
 
-contract UserTable is ERC721Holder {
+contract UsersTable is ERC721Holder {
     // Store relevant table info
     uint256 private _project_tableId;
     string private constant _TABLE_PREFIX = "table_attributes"; // Custom table prefix
@@ -27,7 +27,7 @@ contract UserTable is ERC721Holder {
                 "image text,"
                 "location text,"
 				"password text,"
-                "project_referency_table text",
+                "project_contract_id text",
                _TABLE_PREFIX
             )
         );
@@ -40,7 +40,7 @@ contract UserTable is ERC721Holder {
             SQLHelpers.toInsert(
                 _TABLE_PREFIX,
                 _project_tableId,
-                "id,name,email,data,biography,image,location,password,project_referency_table",
+                "id,name,email,data,biography,image,location,password,project_contract_id",
                 query
             )
         );
