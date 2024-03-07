@@ -5,16 +5,20 @@ import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {ERC721Holder} from "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import {TablelandDeployments} from "@tableland/evm/contracts/utils/TablelandDeployments.sol";
 import {SQLHelpers} from "@tableland/evm/contracts/utils/SQLHelpers.sol";
-
-contract ProjectTable is ERC721Holder {
-    // Store relevant table info
+// import {Project} from "./Project.sol";
+//TODO: create altomatic the Project Contract in insertIntoTable()
+contract ProjectsTable is ERC721Holder {
     uint256 private _project_tableId;
     string private constant _TABLE_PREFIX = "table_attributes"; // Custom table prefix
-    //auto_increment
     //Houdini graphql
     constructor() {
         _createTable();
     }
+
+	// function _createProjectContract() private returns (address) {
+	// 	Project project = new Project(msg.sender);
+	// 	return address(project);
+	// }
 
     function _createTable() private {
         _project_tableId = TablelandDeployments.get().create(
@@ -23,9 +27,12 @@ contract ProjectTable is ERC721Holder {
                "id int primary key,"
                 "title text,"
                 "description text,"
-                "data text,"
+                "story text,"
+				"image text,"
+				"video text,"
                 "location text,"
-                "user_tableId text",
+                "user_contract_id text,"
+				"project_contract_id text",
                _TABLE_PREFIX
             )
         );
@@ -38,7 +45,7 @@ contract ProjectTable is ERC721Holder {
             SQLHelpers.toInsert(
                 _TABLE_PREFIX,
                 _project_tableId,
-                "id,title,description,data,location,user_tableId",
+                "id,title,description,story,image,video,location,user_contract_id,project_contract_id",
                 query
             )
         );
