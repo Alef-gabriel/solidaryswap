@@ -2,16 +2,93 @@
   import CategoriesSelector from "$lib/CategoriesSelector.svelte";
   import EditProjectNavBar from "$lib/EditProjectNavBar.svelte";
   import MainProjectNavBar from "$lib/MainProjectNavBar.svelte";
-  import { writable} from "svelte/store";
+  import { writable } from "svelte/store";
+  import WalletConnect from "$lib/WalletConnect.svelte";
+  import * as Delegation from "@ucanto/core/delegation";
+  import * as Client from "@web3-storage/w3up-client";
+  import { onMount } from "svelte";
 
   let principalSelectedCategory = writable();
   let principalSelectedSubCategory = "";
   let selectedCategory = writable();
   let selectedSubCategory = "";
+
+  let form = {
+    title: "",
+    description: "",
+    image: "",
+    video: "",
+    location: "",
+  };
+
+  const w3upDelegation = async () => {
+    const client = await Client.create();
+
+    const did = await client.did();
+    const apiUrl = `http://localhost:5173/api/w3up-delegation/${did}`;
+    const response = await fetch(apiUrl);
+    const data = await response.arrayBuffer();
+
+    const delegation = await Delegation.extract(new Uint8Array(data));
+    if (!delegation.ok) {
+      throw new Error("Failed to extract delegation", {
+        cause: delegation.error,
+      });
+    }
+    const space = await client.addSpace(delegation.ok);
+    await client.setCurrentSpace(space.did());
+    return client;
+  };
+
+  const w3uploadFile = async (file) => {
+    const web3Client = await w3upDelegation();
+    const cid = await web3Client.uploadFile(file);
+    return cid.toString();
+  };
+
+  const handleSubmit = async () => {
+    //form.image = await w3uploadFile(form.image);
+	console.log(form.image);
+    //form.video = await w3uploadFile(form.video);
+    await fetchData();
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://localhost:5173/api/project/basics", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+      if (response.ok) {
+        return await response.json();
+      } else {
+        const error = new Error(await response.text());
+        throw error;
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  onMount(() => {
+    const image = document.getElementById("image");
+    image.addEventListener("change", async (event) => {
+      form.image = event.target.files[0];
+    });
+
+    const video = document.getElementById("video");
+    video.addEventListener("change", async (event) => {
+      form.video = event.target.files[0];
+    });
+  });
 </script>
 
 <MainProjectNavBar />
 <EditProjectNavBar />
+<WalletConnect />
 <div class="w-full">
   <div class="flex flex-col justify-center items-center w-full h-36">
     <h1 class="text-3xl pb-4">Start with the basics</h1>
@@ -22,6 +99,15 @@
   <hr />
   <div class="flex gap-16 w-full h-86 items-center justify-center p-8">
     <div class="w-1/4">
+      <button
+        type="submit"
+        on:click={async () => {
+          await handleSubmit();
+        }}
+        class="bg-white border text-gray-600 py-2 px-4 w-1/4 flex items-center justify-center gap-2"
+      >
+        gofofo</button
+      >
       <h2 class="text-xl pb-4">Project title</h2>
       <p class="text-gray-400 text-sm">
         Write a clear, brief title and subtitle to help people quickly
@@ -39,8 +125,9 @@
         <label for="title" class="block mb-2 text-lg">Title</label>
         <input
           type="text"
-          id="subtitle"
-          placeholder="nothing...."
+          id="title"
+          name="title"
+          bind:value={form.title}
           class="w-3/4 p-2 bg-white border focus:outline-none"
         />
       </div>
@@ -48,7 +135,8 @@
         <label for="subtitle" class="block mb-2 text-lg">Subtitle</label>
         <textarea
           id="subtitle"
-          placeholder="nothing...."
+          name="subtitle"
+          bind:value={form.description}
           class="w-3/4 p-4 bg-white border focus:outline-none resize-none"
         />
       </div>
@@ -111,7 +199,7 @@
     <div class="flex flex-col gap-8 w-3/4">
       <div class="flex items-center justify-center w-full">
         <label
-          for="dropzone-file"
+          for="image"
           class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
         >
           <div class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -137,7 +225,7 @@
               SVG, PNG, JPG or GIF (MAX. 800x400px)
             </p>
           </div>
-          <input id="dropzone-file" type="file" class="hidden" />
+          <input id="image" name="image" type="file" class="hidden" />
         </label>
       </div>
     </div>
@@ -153,7 +241,9 @@
     <div class="flex flex-col gap-8 w-3/4">
       <div class="mb-6">
         <input
-          id="subtitle"
+          id="location"
+          name="location"
+          bind:value={form.location}
           placeholder="Start typing your location..."
           class="w-3/4 p-3 bg-white border focus:outline-none resize-none"
         />
@@ -181,7 +271,7 @@
   <div class="flex flex-col gap-8 w-3/4">
     <div class="flex items-center justify-center w-full">
       <label
-        for="dropzone-file"
+        for="video"
         class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
       >
         <div class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -207,7 +297,7 @@
             SVG, PNG, JPG or GIF (MAX. 800x400px)
           </p>
         </div>
-        <input id="dropzone-file" type="file" class="hidden" />
+        <input id="video" name="video" type="file" class="hidden" />
       </label>
     </div>
   </div>
@@ -385,4 +475,3 @@
     </div>
   </div>
 </div>
-<hr />
