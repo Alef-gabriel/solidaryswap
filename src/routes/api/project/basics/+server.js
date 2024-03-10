@@ -29,5 +29,5 @@ export async function POST({ request }) {
     `'${id}','${title}','${description}','${image}','${video}','${location}'`
   );
   console.log(await contract.getTableName());
-  return new Response(JSON.stringify({ message: "Created" }), { status: 200 });
+  return new Response(JSON.stringify({ id: id }), { status: 200 });
 }

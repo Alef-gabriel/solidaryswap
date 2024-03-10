@@ -4,9 +4,13 @@
   import MainProjectNavBar from "$lib/MainProjectNavBar.svelte";
   import EditProjectNavBar from "$lib/EditProjectNavBar.svelte";
   import { writable } from "svelte/store";
+  import { page } from "$app/stores";
   import { w3upDelegation } from "$lib/w3upDelegation.js";
+  import { projectTableID } from "$lib/localStorage.js";
 
   let faqs = writable([]);
+  const params = $page.url.searchParams.has("id");
+  const id = params ? params: $projectTableID;
 
   function addNewFAQ() {
     faqs.update((existingFAQs) => {
@@ -44,23 +48,29 @@
   };
 
   const handleSubmit = async () => {
-    data.story = quill.container.innerHTML;
-    data.faqs = $faqs;
-    const jsonString = JSON.stringify(data);
-    const blob = new Blob([jsonString], { type: "application/json" });
-    const cid = await w3uploadFile(blob);
-    await fetchData(cid);
+    if (id) {
+      data.story = quill.container.innerHTML;
+      data.faqs = $faqs;
+      const jsonString = JSON.stringify(data);
+      const blob = new Blob([jsonString], { type: "application/json" });
+      const cid = await w3uploadFile(blob);
+      await fetchData(cid, id);
+    }
   };
 
-  const fetchData = async (cid) => {
+  //TODO recive the project Id
+  const fetchData = async (cid, id) => {
     try {
-      const response = await fetch("http://localhost:5173/api/project/story", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ data: cid }),
-      });
+      const response = await fetch(
+        `http://localhost:5173/api/project/story/${id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ data: cid }),
+        }
+      );
       if (response.ok) {
         return await response.json();
       } else {
@@ -130,7 +140,7 @@
   <div class="flex items-center gap-8 w-3/4 justify-center">
     <textarea
       id="risks"
-	  bind:value={data.risks}
+      bind:value={data.risks}
       placeholder=""
       class="w-3/4 p-4 bg-white border focus:outline-none resize-none"
     />

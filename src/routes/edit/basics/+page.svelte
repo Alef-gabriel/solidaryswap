@@ -4,7 +4,9 @@
   import MainProjectNavBar from "$lib/MainProjectNavBar.svelte";
   import { writable } from "svelte/store";
   import { onMount } from "svelte";
+  import { goto } from '$app/navigation';
   import { w3upDelegation } from "$lib/w3upDelegation.js";
+  import { projectTableID } from "$lib/localStorage.js";
 
   let principalSelectedCategory = writable();
   let principalSelectedSubCategory = "";
@@ -26,10 +28,12 @@
   };
 
   const handleSubmit = async () => {
-    //form.image = await w3uploadFile(form.image);
-    console.log(form.image);
-    //form.video = await w3uploadFile(form.video);
-    await fetchData();
+    form.image = await w3uploadFile(form.image);
+    form.video = await w3uploadFile(form.video);
+    const res = await fetchData();
+    const req = await res.json();
+    projectTableID.set(req.id);
+	goto("story");
   };
 
   const fetchData = async () => {
