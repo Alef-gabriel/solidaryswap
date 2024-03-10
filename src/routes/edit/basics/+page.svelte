@@ -86,9 +86,8 @@
   });
 </script>
 
-<MainProjectNavBar />
+<MainProjectNavBar saveFunction={handleSubmit}/>
 <EditProjectNavBar />
-<WalletConnect />
 <div class="w-full">
   <div class="flex flex-col justify-center items-center w-full h-36">
     <h1 class="text-3xl pb-4">Start with the basics</h1>
@@ -99,15 +98,6 @@
   <hr />
   <div class="flex gap-16 w-full h-86 items-center justify-center p-8">
     <div class="w-1/4">
-      <button
-        type="submit"
-        on:click={async () => {
-          await handleSubmit();
-        }}
-        class="bg-white border text-gray-600 py-2 px-4 w-1/4 flex items-center justify-center gap-2"
-      >
-        gofofo</button
-      >
       <h2 class="text-xl pb-4">Project title</h2>
       <p class="text-gray-400 text-sm">
         Write a clear, brief title and subtitle to help people quickly
