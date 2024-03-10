@@ -24,10 +24,10 @@ contract ProjectsTable is ERC721Holder {
         _project_tableId = TablelandDeployments.get().create(
             address(this),
             SQLHelpers.toCreateFromSchema(
-               "id int primary key,"
+               "id text primary key,"
                 "title text,"
                 "description text,"
-                "story text,"
+                "data text,"
 				"image text,"
 				"video text,"
                 "location text,"
@@ -38,25 +38,25 @@ contract ProjectsTable is ERC721Holder {
         );
     }
 
-    function insertIntoTable(string memory query) external {
+    function insertIntoTable(string memory query, string memory values) external {
         TablelandDeployments.get().mutate(
             address(this), // Table owner, i.e., this contract
             _project_tableId,
             SQLHelpers.toInsert(
                 _TABLE_PREFIX,
                 _project_tableId,
-                "id,title,description,story,image,video,location,user_contract_id,project_contract_id",
-                query
+                query,
+                values
             )
         );
     }
 
     // Update only the row that the caller inserted
-    function updateTable(uint256 id, string memory query) external {
+    function updateTable(string memory id, string memory query) external {
         // Set the values to update
         string memory filters = string.concat(
             "id=",
-            Strings.toString(id)
+            id
         );
         // Mutate a row at `id` with a new `val`
         TablelandDeployments.get().mutate(
@@ -66,11 +66,11 @@ contract ProjectsTable is ERC721Holder {
         );
     }
 
-    function deleteFromTable(uint256 id) external {
+    function deleteFromTable(string memory id) external {
         // Specify filters for which row to delete
         string memory filters = string.concat(
             "id=",
-            Strings.toString(id)
+            id
         );
         // Mutate a row at `id`
         TablelandDeployments.get().mutate(

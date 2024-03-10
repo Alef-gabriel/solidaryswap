@@ -9,8 +9,8 @@ import { Wallet, getDefaultProvider } from "ethers";
 import "dotenv/config"
 
 async function main() {
-  const provider = getDefaultProvider(process.env.PROVIDER_URL);
-  const wallet = new Wallet(process.env.WALLET_PRIVATY_KEY, provider);
+  const provider = getDefaultProvider(process.env.PUBLIC_PROVIDER_URL);
+  const wallet = new Wallet(process.env.SECRET_WALLET_PRIVATY_KEY, provider);
 
   const contractFactory = await hre.ethers.getContractFactory(
     "SolidarySwap",
@@ -18,7 +18,7 @@ async function main() {
   );
 
   const contract = await contractFactory.deploy();
-  process.env.CONTRACT_ADDRESS = contract.address;
+  process.env.PUBLIC_CONTRACT_ADDRESS = contract.address;
   console.log(`SolidarySwap deployed to ${contract.address}`);
 }
 

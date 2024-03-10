@@ -3,10 +3,8 @@
   import EditProjectNavBar from "$lib/EditProjectNavBar.svelte";
   import MainProjectNavBar from "$lib/MainProjectNavBar.svelte";
   import { writable } from "svelte/store";
-  import WalletConnect from "$lib/WalletConnect.svelte";
-  import * as Delegation from "@ucanto/core/delegation";
-  import * as Client from "@web3-storage/w3up-client";
   import { onMount } from "svelte";
+  import { w3upDelegation } from "$lib/w3upDelegation.js";
 
   let principalSelectedCategory = writable();
   let principalSelectedSubCategory = "";
@@ -21,25 +19,6 @@
     location: "",
   };
 
-  const w3upDelegation = async () => {
-    const client = await Client.create();
-
-    const did = await client.did();
-    const apiUrl = `http://localhost:5173/api/w3up-delegation/${did}`;
-    const response = await fetch(apiUrl);
-    const data = await response.arrayBuffer();
-
-    const delegation = await Delegation.extract(new Uint8Array(data));
-    if (!delegation.ok) {
-      throw new Error("Failed to extract delegation", {
-        cause: delegation.error,
-      });
-    }
-    const space = await client.addSpace(delegation.ok);
-    await client.setCurrentSpace(space.did());
-    return client;
-  };
-
   const w3uploadFile = async (file) => {
     const web3Client = await w3upDelegation();
     const cid = await web3Client.uploadFile(file);
@@ -48,7 +27,7 @@
 
   const handleSubmit = async () => {
     //form.image = await w3uploadFile(form.image);
-	console.log(form.image);
+    console.log(form.image);
     //form.video = await w3uploadFile(form.video);
     await fetchData();
   };
@@ -86,7 +65,7 @@
   });
 </script>
 
-<MainProjectNavBar saveFunction={handleSubmit}/>
+<MainProjectNavBar saveFunction={handleSubmit} />
 <EditProjectNavBar />
 <div class="w-full">
   <div class="flex flex-col justify-center items-center w-full h-36">

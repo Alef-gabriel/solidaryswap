@@ -4,6 +4,7 @@
   import MainProjectNavBar from "$lib/MainProjectNavBar.svelte";
   import EditProjectNavBar from "$lib/EditProjectNavBar.svelte";
   import { writable } from "svelte/store";
+  import { w3upDelegation } from "$lib/w3upDelegation.js";
 
   let faqs = writable([]);
 
@@ -27,13 +28,57 @@
     ["clean"],
   ];
 
+  //TODO: all togheter just wait save on web3 and save all,make a parser to do it
+  let quill;
+
+  let data = {
+    story: "",
+    faqs: [],
+    risks: "",
+  };
+
+  const w3uploadFile = async (file) => {
+    const web3Client = await w3upDelegation();
+    const cid = await web3Client.uploadFile(file);
+    return cid.toString();
+  };
+
+  const handleSubmit = async () => {
+    data.story = quill.container.innerHTML;
+    data.faqs = $faqs;
+    const jsonString = JSON.stringify(data);
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const cid = await w3uploadFile(blob);
+    await fetchData(cid);
+  };
+
+  const fetchData = async (cid) => {
+    try {
+      const response = await fetch("http://localhost:5173/api/project/story", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data: cid }),
+      });
+      if (response.ok) {
+        return await response.json();
+      } else {
+        const error = new Error(await response.text());
+        throw error;
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
   onMount(async () => {
     if (browser) {
       let editor = document.getElementById("editor");
       const { default: Quill } = await import("quill");
 
       if (editor) {
-        let quill = new Quill(editor, {
+        quill = new Quill(editor, {
           modules: {
             toolbar: toolbarOptions,
           },
@@ -45,7 +90,7 @@
   });
 </script>
 
-<MainProjectNavBar />
+<MainProjectNavBar saveFunction={handleSubmit} />
 <EditProjectNavBar />
 <div class="w-full">
   <div class="flex flex-col justify-center items-center w-full h-36">
@@ -84,8 +129,9 @@
   </div>
   <div class="flex items-center gap-8 w-3/4 justify-center">
     <textarea
-      id="subtitle"
-      placeholder="nothing...."
+      id="risks"
+	  bind:value={data.risks}
+      placeholder=""
       class="w-3/4 p-4 bg-white border focus:outline-none resize-none"
     />
   </div>
