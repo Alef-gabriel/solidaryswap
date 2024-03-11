@@ -14,7 +14,12 @@ export const load = async ({ params }) => {
     const signer = wallet.connect(provider);
     const db = new Database({ signer });
 
-    const { results } = await db.prepare(`SELECT * FROM ${SECRET_PROJECT_TABLE_NAME} WHERE id='${params.id}'`).all();
+    const { results } = await db
+      .prepare(
+        `SELECT * FROM ${SECRET_PROJECT_TABLE_NAME} WHERE id='${params.id}'`
+      )
+      .all();
+
     return results;
   };
 

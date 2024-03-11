@@ -53,7 +53,7 @@
     <!-- each in projects to get all -->
     {#if data}
       {#each data.projects as project}
-        <a href="#">
+        <a href="/projects/{project.id}">
           <div class="flex items-start p-4 shadow">
             <div id="pic-bunner"></div>
             <div class="flex flex-col justify-center pl-4 items-center w-3/4">

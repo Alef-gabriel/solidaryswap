@@ -1,9 +1,26 @@
 <script>
   import MainNavBar from "$lib/MainNavBar.svelte";
   import StoryNavBar from "$lib/StoryNavBar.svelte";
+  import { json } from "@sveltejs/kit";
+  import { onMount } from "svelte";
 
   export let data;
   const project = data.project[0];
+  let video = null;
+  let image;
+
+  async function fetchData(link) {
+    const response = await fetch(`https://${link}.ipfs.w3s.link/`);
+    const blob = await response.blob();
+	return URL.createObjectURL(blob);
+  }
+  //TODO: create a load
+  onMount(async () => {
+	if (project.video != "null") {
+		video = await fetchData(project.video);
+	}
+	image = await fetchData(project.image);
+  })
 </script>
 
 <MainNavBar isOnEditPage={false} />
@@ -16,16 +33,22 @@
     <div class="flex gap-8 w-full h-86 p-8">
       <div class="flex">
         <!-- if have video do video else do image -->
-        {#if project.video}
+        {#if video}
           <video width="750" height="450" controls>
             <source
-              src="https://w3s.link/ipfs/{project.video}"
+              src={video}
               type="video/mp4"
             />
             <track kind="captions" srclang="en" label="english_captions" />
           </video>
         {:else}
-          <div id="pic-bunner"></div>
+          <img
+            id="pic-bunner"
+            src={image}
+            alt="bunner"
+            width="750"
+            height="450"
+          />
         {/if}
       </div>
       <div class="flex flex-col gap-6 w-2/6">
@@ -79,7 +102,7 @@
     </div>
     <div class="sticky top-24 flex flex-col w-1/4 p-4 h-56">
       <div class="w-full h-46 flex flex-col gap-4 border p-4">
-        <div id="pic-user"></div>
+        <div id="pic-user" class=""></div>
         <div>
           <p class="text-lg text-gray-600 font-bold">Alef Gabriel</p>
           <p class="text-gray-400">85 created . 165 backed</p>
@@ -99,7 +122,6 @@
 
 <style>
   #pic-bunner {
-    background-image: url(`https://w3s.link/ipfs/${project.image}`);
     background-position: center;
     background-size: cover;
     width: 750px;
