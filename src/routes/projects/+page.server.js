@@ -9,7 +9,7 @@ import {
 export const load = async () => {
   const fetchProjects = async () => {
     const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
-    const wallet = new Wallet(getEnv(SECRET_WALLET_PRIVATY_KEY), provider);
+    const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
 
     const signer = wallet.connect(provider);
     const db = new Database({ signer });
