@@ -1,4 +1,5 @@
 <script>
+	export let saveFunction = () => {};
 </script>
 
 <div class="sticky top-0 w-full h-20 bg-white flex border-b">
@@ -17,6 +18,7 @@
     </button>
     <button
       class="bg-violet-600 hover:bg-violet-700 text-white py-2 px-4 w-1/4"
+	  on:click={saveFunction}
     >
       Save
     </button>
