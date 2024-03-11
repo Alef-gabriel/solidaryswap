@@ -4,7 +4,7 @@
   import MainProjectNavBar from "$lib/MainProjectNavBar.svelte";
   import { writable } from "svelte/store";
   import { onMount } from "svelte";
-  import { goto } from '$app/navigation';
+  import * as navigation from "$app/navigation";
   import { w3upDelegation } from "$lib/w3upDelegation.js";
   import { projectTableID } from "$lib/localStorage.js";
 
@@ -16,8 +16,8 @@
   let form = {
     title: "",
     description: "",
-    image: "",
-    video: "",
+    image: null,
+    video: null,
     location: "",
   };
 
@@ -27,13 +27,16 @@
     return cid.toString();
   };
 
+  //TODO:create a loading
   const handleSubmit = async () => {
     form.image = await w3uploadFile(form.image);
-    form.video = await w3uploadFile(form.video);
+    if (form.video) {
+      form.video = await w3uploadFile(form.video);
+    }
     const res = await fetchData();
     const req = await res.json();
     projectTableID.set(req.id);
-	goto("story");
+    navigation.goto("story");
   };
 
   const fetchData = async () => {
@@ -64,7 +67,10 @@
 
     const video = document.getElementById("video");
     video.addEventListener("change", async (event) => {
-      form.video = event.target.files[0];
+      const selectedFile = event.target.files[0];
+      if (selectedFile) {
+        form.video = selectedFile;
+      }
     });
   });
 </script>
