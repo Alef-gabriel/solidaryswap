@@ -34,9 +34,8 @@
       form.video = await w3uploadFile(form.video);
     }
     const res = await fetchData();
-    const req = await res.json();
-    projectTableID.set(req.id);
-    navigation.goto("story");
+    projectTableID.set(res.id);
+    navigation.goto(`story?id=${res.id}`);
   };
 
   const fetchData = async () => {

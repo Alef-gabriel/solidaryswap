@@ -9,7 +9,7 @@
   import { projectTableID } from "$lib/localStorage.js";
 
   let faqs = writable([]);
-  const params = $page.url.searchParams.has("id");
+  const params = $page.url.searchParams.get("id");
   const id = params ? params: $projectTableID;
 
   function addNewFAQ() {
