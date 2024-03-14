@@ -1,12 +1,73 @@
 <script>
   import MainNavBar from "$lib/MainNavBar.svelte";
+  import { onMount } from "svelte";
+  import * as navigation from "$app/navigation";
+  import { w3upDelegation } from "$lib/w3upDelegation.js";
+  export let data;
 
   let editProfile = false;
   let account = true;
   let changePassword = false;
+
+  //   $:User = data?.authedUser;
+
+  let form = {
+    name: "",
+    biography: "",
+    image: null,
+    location: "",
+  };
+
+  const w3uploadFile = async (file) => {
+    const web3Client = await w3upDelegation();
+    console.log("before delegation");
+    const cid = await web3Client.uploadFile(file);
+    return cid.toString();
+  };
+
+  //TODO:create a loading
+  const handleSubmit = async () => {
+    console.log("Here a'im here ");
+    if (form.image) {
+      form.image = await w3uploadFile(form.image);
+    }
+    console.log("Before image ");
+    const res = await fetchData();
+    //navigation.goto(`story?id=${res.id}`);
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5173/api/user-update/${data?.authedUser.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(form),
+        }
+      );
+      if (response.ok) {
+        return await response.json();
+      } else {
+        const error = new Error(await response.text());
+        throw error;
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  onMount(() => {
+    const image = document.getElementById("image");
+    image.addEventListener("change", async (event) => {
+      form.image = event.target.files[0];
+    });
+  });
 </script>
 
-<MainNavBar isOnEditPage={false}/>
+<MainNavBar isOnEditPage={false} />
 <div class="w-full border-b items-center">
   <div class="w-full flex items-center p-8">
     <h1 class="text-5xl">Settings</h1>
@@ -25,7 +86,7 @@
       <a
         href="#"
         on:click={() => {
-          editProfile = true;
+          editProfile = !editProfile;
         }}
       >
         <p class="text-lg text-gray-600">Edit profile</p>
@@ -37,18 +98,18 @@
   <div class="flex gap-16 w-full h-86 p-8">
     <div class="flex flex-col gap-8 w-2/4">
       <div>
-        <label for="title" class="block mb-2 text-lg">Name</label>
+        <label for="name" class="block mb-2 text-lg">Name</label>
         <input
           type="text"
-          id="subtitle"
+          bind:value={form.name}
+          id="name"
           class="w-3/4 p-2 bg-white border focus:outline-none"
         />
       </div>
       <div>
-        <label for="title" class="block mb-2 text-lg">Avatar</label>
         <div class="flex items-center justify-center w-full">
           <label
-            for="dropzone-file"
+            for="image"
             class="flex flex-col items-center justify-center w-full h-46 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
           >
             <div class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -74,14 +135,15 @@
                 SVG, PNG, JPG or GIF (MAX. 800x400px)
               </p>
             </div>
-            <input id="dropzone-file" type="file" class="hidden" />
+            <input id="image" type="file" class="hidden" />
           </label>
         </div>
       </div>
       <div>
-        <label for="subtitle" class="block mb-2 text-lg">Biography</label>
+        <label for="biography" class="block mb-2 text-lg">Biography</label>
         <textarea
-          id="subtitle"
+          id="biography"
+          bind:value={form.biography}
           class="w-3/4 p-4 bg-white border focus:outline-none resize-none"
         />
         <p class="text-sm text-gray-600">
@@ -92,10 +154,11 @@
     </div>
     <div class="flex flex-col gap-8 w-2/4">
       <div>
-        <label for="title" class="block mb-2 text-lg">Location</label>
+        <label for="location" class="block mb-2 text-lg">Location</label>
         <input
           type="text"
-          id="subtitle"
+          id="location"
+          bind:value={form.location}
           placeholder="E.g. Brooklyn, NY"
           class="w-3/4 p-2 bg-white border focus:outline-none"
         />
@@ -112,21 +175,30 @@
           setting for emails.
         </p>
       </div>
+      <div>
+        <button
+          on:click={handleSubmit}
+          class="bg-gray-600 hover:bg-gray-900 border text-white py-2 px-4 w-full flex items-center justify-center gap-2"
+        >
+          <div id="pic-next"></div>
+          Update your profile
+        </button>
+      </div>
     </div>
   </div>
 {/if}
 {#if account}
   <div class="flex flex-col gap-8 w-2/4 p-8">
     <div>
-      <label for="title" class="block mb-2 text-lg">Email</label>
+      <label for="email" class="block mb-2 text-lg">Email</label>
       <input
         type="text"
-        id="subtitle"
+        id="email"
         class="w-3/4 p-2 bg-white border focus:outline-none"
       />
     </div>
     <div>
-      <label for="title" class="block mb-2 text-lg">Password</label>
+      <label for="password" class="block mb-2 text-lg">Password</label>
       <button
         class="bg-violet-800 text-white py-2 px-4 w-2/6"
         on:click={() => {
@@ -144,7 +216,9 @@
           id="subtitle"
           class="w-3/4 p-2 bg-white border focus:outline-none"
         />
-        <label for="title" class="block mb-2 text-lg pt-8">Confirm Password</label>
+        <label for="title" class="block mb-2 text-lg pt-8"
+          >Confirm Password</label
+        >
         <input
           type="text"
           id="subtitle"
