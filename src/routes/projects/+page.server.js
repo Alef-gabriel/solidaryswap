@@ -8,13 +8,20 @@ import {
 
 export const load = async () => {
   const fetchProjects = async () => {
+    let page_number = 1;
     const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
     const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
 
     const signer = wallet.connect(provider);
     const db = new Database({ signer });
 
-    const { results } = await db.prepare(`SELECT * FROM ${SECRET_PROJECT_TABLE_NAME}`).all();
+    const { results } = await db
+      .prepare(
+        `SELECT * FROM ${SECRET_PROJECT_TABLE_NAME} LIMIT 10 OFFSET ${
+          (page_number - 1) * 10
+        }`
+      )
+      .all();
     return results;
   };
 
