@@ -4,9 +4,10 @@
   import { json } from "@sveltejs/kit";
   import { onMount } from "svelte";
   import { writable } from "svelte/store";
-
   export let data;
+
   const project = data.project[0];
+  const owner = data.owner[0];
   let storyHtml = writable("");
   let video = null;
   let campaign = true;
@@ -114,15 +115,13 @@
       <div class="w-full h-46 flex flex-col gap-4 border p-4">
         <div id="pic-user" class=""></div>
         <div>
-          <p class="text-lg text-gray-600 font-bold">Alef Gabriel</p>
+          <p class="text-lg text-gray-600 font-bold">{owner.name}</p>
           <p class="text-gray-400">85 created . 165 backed</p>
         </div>
         <div>
           <!-- biography -->
           <p class="text-gray-400">
-            Philip Reed loves to create stuff and things, from roleplaying game
-            supplements to music to whatever sounds fun at that exact moment in
-            time. He can often be found working when he should be sleeping.
+            {owner.biography}
           </p>
         </div>
       </div>
