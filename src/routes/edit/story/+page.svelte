@@ -4,6 +4,7 @@
   import MainProjectNavBar from "$lib/MainProjectNavBar.svelte";
   import EditProjectNavBar from "$lib/EditProjectNavBar.svelte";
   import { writable } from "svelte/store";
+  import * as navigation from "$app/navigation";
   import { page } from "$app/stores";
   import { w3upDelegation } from "$lib/w3upDelegation.js";
   import { projectTableID } from "$lib/localStorage.js";
@@ -54,7 +55,8 @@
       const jsonString = JSON.stringify(data);
       const blob = new Blob([jsonString], { type: "application/json" });
       const cid = await w3uploadFile(blob);
-      await fetchData(cid, id);
+      const res = await fetchData(cid, id);
+	  navigation.goto(`/projects/${res.id}`);
     }
   };
 

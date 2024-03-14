@@ -12,6 +12,7 @@
   let principalSelectedSubCategory = "";
   let selectedCategory = writable();
   let selectedSubCategory = "";
+  export let data;
 
   let form = {
     title: "",
@@ -19,6 +20,7 @@
     image: null,
     video: null,
     location: "",
+	user_contract_id:"",
   };
 
   const w3uploadFile = async (file) => {
@@ -30,6 +32,7 @@
   //TODO:create a loading
   const handleSubmit = async () => {
     form.image = await w3uploadFile(form.image);
+	form .user_contract_id = data?.authedUser.id;
     if (form.video) {
       form.video = await w3uploadFile(form.video);
     }

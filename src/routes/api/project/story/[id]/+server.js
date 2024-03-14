@@ -24,5 +24,5 @@ export async function POST({ request, params }) {
   );
   await contract.updateTable(`'${params.id}'`, `data='${data}'`);
   console.log(await contract.getTableName());
-  return new Response(JSON.stringify({ message: "Created" }), { status: 200 });
+  return new Response(JSON.stringify({ id: params.id }), { status: 200 });
 }
