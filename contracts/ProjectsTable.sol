@@ -5,8 +5,8 @@ import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {ERC721Holder} from "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import {TablelandDeployments} from "@tableland/evm/contracts/utils/TablelandDeployments.sol";
 import {SQLHelpers} from "@tableland/evm/contracts/utils/SQLHelpers.sol";
-// import {Project} from "./Project.sol";
-//TODO: create altomatic the Project Contract in insertIntoTable()
+import {Project} from "./Project.sol";
+
 contract ProjectsTable is ERC721Holder {
     uint256 private _project_tableId;
     string private constant _TABLE_PREFIX = "table_attributes"; // Custom table prefix
@@ -15,10 +15,10 @@ contract ProjectsTable is ERC721Holder {
         _createTable();
     }
 
-	// function _createProjectContract() private returns (address) {
-	// 	Project project = new Project(msg.sender);
-	// 	return address(project);
-	// }
+	function _createProjectContract() private returns (string memory) {
+		Project project = new Project(address(this));
+		return Strings.toString(uint256(uint160(address(project))));
+	}
 
     function _createTable() private {
         _project_tableId = TablelandDeployments.get().create(
@@ -32,6 +32,8 @@ contract ProjectsTable is ERC721Holder {
 				"video text,"
                 "location text,"
                 "user_contract_id text,"
+				"backers_table_name text,"
+				"comments_table_name text,"
 				"project_contract_id text",
                _TABLE_PREFIX
             )
@@ -39,14 +41,23 @@ contract ProjectsTable is ERC721Holder {
     }
 
     function insertIntoTable(string memory query, string memory values) external {
+		string memory newQuery = string.concat(
+            query,
+            ",project_contract_id"
+        );
+		string memory newValues = string.concat(
+            values,
+            ",",
+			SQLHelpers.quote(_createProjectContract())
+        );
         TablelandDeployments.get().mutate(
             address(this), // Table owner, i.e., this contract
             _project_tableId,
             SQLHelpers.toInsert(
                 _TABLE_PREFIX,
                 _project_tableId,
-                query,
-                values
+                newQuery,
+                newValues
             )
         );
     }

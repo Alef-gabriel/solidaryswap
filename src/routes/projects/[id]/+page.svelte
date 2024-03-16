@@ -4,6 +4,7 @@
   import { json } from "@sveltejs/kit";
   import { onMount } from "svelte";
   import { writable } from "svelte/store";
+  import BackerModal from "../../../lib/BackerModal.svelte";
   export let data;
 
   const project = data.project[0];
@@ -12,6 +13,7 @@
   let video = null;
   let campaign = true;
   let image;
+  let backed = false;
 
   async function fetchMidia(link) {
     const response = await fetch(`https://${link}.ipfs.w3s.link/`);
@@ -34,6 +36,7 @@
 </script>
 
 <MainNavBar isOnEditPage={false} />
+<BackerModal bind:isActivated={backed} {project} userId={data?.authedUser.id} />
 {#if data}
   <div class="bg-gray-50 flex flex-col">
     <div class="flex flex-col justify-center p-8 items-center w-full h-36">
@@ -75,7 +78,11 @@
           <p class="text-gray-500">proposals</p>
         </div>
         <div class="flex flex-col gap-4">
+          <!-- <WalletConnect buttonLabel={"Back this project"} /> -->
           <button
+            on:click={() => {
+              backed = true;
+            }}
             class="bg-violet-600 hover:bg-violet-700 text-white py-2 px-4 w-full"
           >
             Back this project
@@ -93,12 +100,22 @@
   <StoryNavBar />
   <div class="flex w-full">
     <div class="sticky top-24 flex flex-col gap-4 w-1/4 p-4 h-56">
-      <a href="#campaign" on:click={()=> {campaign = true}}>
+      <a
+        href="#campaign"
+        on:click={() => {
+          campaign = true;
+        }}
+      >
         <div class="flex items-center p-2 border-violet-600 hover:border-l-4">
           <p class="text-lg text-gray-600 font-semibold">Story</p>
         </div>
       </a>
-      <a href="#campaign" on:click={()=> {campaign = false}}>
+      <a
+        href="#campaign"
+        on:click={() => {
+          campaign = false;
+        }}
+      >
         <div class="flex items-center p-2 border-violet-600 hover:border-l-4">
           <p class="text-lg text-gray-600 font-semibold">Risks</p>
         </div>

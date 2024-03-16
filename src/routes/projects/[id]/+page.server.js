@@ -43,8 +43,19 @@ export const load = async ({ params, locals }) => {
       .all();
     return results;
   };
+
+  const getLocals = () => {
+    let authedUser = undefined;
+    if (locals.authedUser) {
+      authedUser = locals.authedUser;
+    }
+    console.log("Locals o Project ", authedUser);
+    return authedUser;
+  };
+
   return {
     project: await fetchProjects(),
     owner: await fetchUsers(),
+    authedUser: getLocals(),
   };
 };

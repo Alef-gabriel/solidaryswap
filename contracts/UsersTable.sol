@@ -8,7 +8,7 @@ import {SQLHelpers} from "@tableland/evm/contracts/utils/SQLHelpers.sol";
 
 contract UsersTable is ERC721Holder {
     // Store relevant table info
-    uint256 private _project_tableId;
+    uint256 private _users_tableId;
     string private constant _TABLE_PREFIX = "table_attributes"; // Custom table prefix
     //auto_increment
     //Houdini graphql
@@ -17,7 +17,7 @@ contract UsersTable is ERC721Holder {
     }
 
     function _createTable() private {
-        _project_tableId = TablelandDeployments.get().create(
+        _users_tableId = TablelandDeployments.get().create(
             address(this),
             SQLHelpers.toCreateFromSchema(
                "id text primary key,"
@@ -36,10 +36,10 @@ contract UsersTable is ERC721Holder {
     function insertIntoTable(string memory query, string memory values) external {
         TablelandDeployments.get().mutate(
             address(this), // Table owner, i.e., this contract
-            _project_tableId,
+            _users_tableId,
             SQLHelpers.toInsert(
                 _TABLE_PREFIX,
-                _project_tableId,
+                _users_tableId,
                 query,
                 values
             )
@@ -56,8 +56,8 @@ contract UsersTable is ERC721Holder {
         // Mutate a row at `id` with a new `val`
         TablelandDeployments.get().mutate(
             address(this),
-            _project_tableId,
-            SQLHelpers.toUpdate(_TABLE_PREFIX, _project_tableId, query, filters)
+            _users_tableId,
+            SQLHelpers.toUpdate(_TABLE_PREFIX, _users_tableId, query, filters)
         );
     }
 
@@ -70,8 +70,8 @@ contract UsersTable is ERC721Holder {
         // Mutate a row at `id`
         TablelandDeployments.get().mutate(
             address(this),
-            _project_tableId,
-            SQLHelpers.toDelete(_TABLE_PREFIX, _project_tableId, filters)
+            _users_tableId,
+            SQLHelpers.toDelete(_TABLE_PREFIX, _users_tableId, filters)
         );
     }
 
@@ -79,16 +79,16 @@ contract UsersTable is ERC721Holder {
     function setAccessControl(address controller) external {
         TablelandDeployments.get().setController(
             address(this), // Table owner, i.e., this contract
-            _project_tableId,
+            _users_tableId,
             controller // Set the controller address—a separate controller contract
         );
     }
 
     function getTableId() external view returns (uint256) {
-        return _project_tableId;
+        return _users_tableId;
     }
 
     function getTableName() external view returns (string memory) {
-        return SQLHelpers.toNameFromId(_TABLE_PREFIX, _project_tableId);
+        return SQLHelpers.toNameFromId(_TABLE_PREFIX, _users_tableId);
     }
 }
