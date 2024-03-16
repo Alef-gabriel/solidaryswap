@@ -2,11 +2,15 @@
   import MainNavBar from "$lib/MainNavBar.svelte";
   import * as navigation from "$app/navigation";
   import EtheriumInput from "../../../../lib/EtheriumInput.svelte";
+  import { deposit } from "$lib/walletConnect.js";
   export let data;
 
   let withdraw = false;
+  let amount;
 
-  const handleSubmit = async () => {};
+  const depositSubmit = async () => {
+	deposit(data.project.backers_table_name, amount);
+  };
 
   const fetchData = async () => {
     try {
@@ -35,7 +39,7 @@
 <MainNavBar isOnEditPage={false} />
 <div class="w-full border-b items-center">
   <div class="w-full flex items-center p-8">
-    <h1 class="text-5xl">Actions</h1>
+    <h1 class="text-5xl">Project actions</h1>
   </div>
   <div class="flex flex-row">
     <div
@@ -79,7 +83,7 @@
     <div class="flex flex-col gap-4 w-3/4 items-center">
       <!-- TODO:Use user wallet or create a connect wallet button here -->
       <div class="mb-6 w-3/4 flex flex-col">
-        <EtheriumInput />
+        <EtheriumInput bind:amount />
       </div>
       <button
         class="bg-violet-600 hover:bg-violet-700 text-white py-2 px-4 w-2/4"
@@ -105,9 +109,10 @@
     </div>
     <div class="flex flex-col gap-4 w-3/4 items-center">
       <div class="mb-6 w-3/4 flex flex-col">
-        <EtheriumInput />
+        <EtheriumInput bind:amount />
       </div>
       <button
+	  on:click={depositSubmit}
         class="bg-violet-600 hover:bg-violet-700 text-white py-2 px-4 w-2/4"
       >
         Deposit profits
