@@ -9,7 +9,7 @@
   let amount;
 
   const depositSubmit = async () => {
-	deposit(data.project.backers_table_name, amount);
+	deposit(data.project[0].project_contract_id, amount);
   };
 
   const fetchData = async () => {

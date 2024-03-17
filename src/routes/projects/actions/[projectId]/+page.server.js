@@ -16,7 +16,7 @@ export const load = async ({ params }) => {
 
     const { results } = await db
       .prepare(
-        `SELECT * FROM ${SECRET_PROJECT_TABLE_NAME} WHERE id='${params.id}'`
+        `SELECT * FROM ${SECRET_PROJECT_TABLE_NAME} WHERE id='${params.projectId}'`
       )
       .all();
     return results;
