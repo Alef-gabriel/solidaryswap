@@ -7,22 +7,23 @@ import {
   SECRET_USER_TABLE_NAME,
 } from "$env/static/private";
 
+const fetchProjects = async (params) => {
+  const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
+  const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
+
+  const signer = wallet.connect(provider);
+  const db = new Database({ signer });
+
+  const { results } = await db
+    .prepare(
+      `SELECT * FROM ${SECRET_PROJECT_TABLE_NAME} WHERE id='${params.id}'`
+    )
+    .all();
+  return results;
+};
+
 export const load = async ({ params, locals }) => {
-  //TODO: create function to SELECT on Users with project table user id
-  const fetchProjects = async () => {
-    const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
-    const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
-
-    const signer = wallet.connect(provider);
-    const db = new Database({ signer });
-
-    const { results } = await db
-      .prepare(
-        `SELECT * FROM ${SECRET_PROJECT_TABLE_NAME} WHERE id='${params.id}'`
-      )
-      .all();
-    return results;
-  };
+  const project = await fetchProjects(params);
 
   const fetchUsers = async () => {
     let authedUser = locals.authedUser;
@@ -44,6 +45,17 @@ export const load = async ({ params, locals }) => {
     return results;
   };
 
+  const fetchComments = async (tableName) => {
+    const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
+    const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
+
+    const signer = wallet.connect(provider);
+    const db = new Database({ signer });
+
+    const { results } = await db.prepare(`SELECT * FROM ${tableName}`).all();
+    return results;
+  };
+
   const getLocals = () => {
     let authedUser = undefined;
     if (locals.authedUser) {
@@ -54,8 +66,9 @@ export const load = async ({ params, locals }) => {
   };
 
   return {
-    project: await fetchProjects(),
+    project: project,
     owner: await fetchUsers(),
+    comments: await fetchComments(project[0].comments_table_name),
     authedUser: getLocals(),
   };
 };
