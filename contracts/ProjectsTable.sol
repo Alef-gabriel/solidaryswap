@@ -16,8 +16,8 @@ contract ProjectsTable is ERC721Holder {
     }
 
 	function _createProjectContract() private returns (string memory) {
-		Project project = new Project(address(this));
-		return Strings.toString(uint256(uint160(address(project))));
+		Project project = new Project(address(msg.sender));
+		return Strings.toHexString(uint256(uint160(address(project))), 20);
 	}
 
     function _createTable() private {
