@@ -35,7 +35,7 @@ contract Project is ERC20, Ownable {
     }
 
 	function getAddressBalance(uint256 index) public view returns (uint256) {
-        return backers[index].balance;
+        return balanceOf(backers[index]);
     }
 
     function deposit() public payable {
