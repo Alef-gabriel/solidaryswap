@@ -6,9 +6,13 @@ import {
   SECRET_PROJECT_TABLE_NAME,
 } from "$env/static/private";
 
-export const load = async () => {
+
+export const load = async ({ url }) => {
   const fetchProjects = async () => {
-    let page_number = 1;
+    let originalPageNumber = 1;
+	const params = url.searchParams.get("page")
+    if (params != undefined) originalPageNumber = params;
+
     const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
     const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
 
@@ -18,7 +22,7 @@ export const load = async () => {
     const { results } = await db
       .prepare(
         `SELECT * FROM ${SECRET_PROJECT_TABLE_NAME} LIMIT 10 OFFSET ${
-          (page_number - 1) * 10
+          (originalPageNumber - 1) * 10
         }`
       )
       .all();

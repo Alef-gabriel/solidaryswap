@@ -1,8 +1,14 @@
 <script>
   import { businessAreas } from "$lib";
   import MainNavBar from "$lib/MainNavBar.svelte";
-
+  import * as navigation from "$app/navigation";
   export let data;
+
+  let page = 0;
+
+  const handlePageChange = (newPageNumber) => {
+    navigation.goto(`/projects?page=${newPageNumber}`);
+  };
 
   function showFilter(id) {
     const targetElement = document.getElementById(id);
@@ -92,6 +98,10 @@
         <ul class="list-style-none flex">
           <li>
             <a
+              on:click={() => {
+                page--;
+                if (page > 0) handlePageChange(page);
+              }}
               class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
               href="#"
               aria-label="Previous"
@@ -99,26 +109,23 @@
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
+          {#each [1, 2, 3] as i}
+            <li>
+              <a
+                on:click={() => {
+                  handlePageChange(i);
+                }}
+                class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
+                href="#">{i}</a
+              >
+            </li>
+          {/each}
           <li>
             <a
-              class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
-              href="#">1</a
-            >
-          </li>
-          <li aria-current="page">
-            <a
-              class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
-              href="#">2</a
-            >
-          </li>
-          <li>
-            <a
-              class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
-              href="#">3</a
-            >
-          </li>
-          <li>
-            <a
+              on:click={() => {
+                page++;
+                handlePageChange(page);
+              }}
               class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
               href="#"
               aria-label="Next"
