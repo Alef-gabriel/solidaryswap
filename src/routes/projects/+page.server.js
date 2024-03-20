@@ -6,12 +6,16 @@ import {
   SECRET_PROJECT_TABLE_NAME,
 } from "$env/static/private";
 
-
 export const load = async ({ url }) => {
   const fetchProjects = async () => {
     let originalPageNumber = 1;
-	const params = url.searchParams.get("page")
-    if (params != undefined) originalPageNumber = params;
+    const page = url.searchParams.get("page");
+    if (page != undefined) originalPageNumber = page;
+
+    let originalSearch = " ";
+    const search = url.searchParams.get("search");
+    if (search != undefined && search != "undefined")
+      originalSearch = ` WHERE title='${search}'`;
 
     const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
     const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
@@ -21,9 +25,9 @@ export const load = async ({ url }) => {
 
     const { results } = await db
       .prepare(
-        `SELECT * FROM ${SECRET_PROJECT_TABLE_NAME} LIMIT 10 OFFSET ${
-          (originalPageNumber - 1) * 10
-        }`
+        `SELECT * FROM ${SECRET_PROJECT_TABLE_NAME}` +
+          originalSearch +
+          `LIMIT 10 OFFSET ${(originalPageNumber - 1) * 10}`
       )
       .all();
     return results;

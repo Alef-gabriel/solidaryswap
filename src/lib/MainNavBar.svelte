@@ -1,4 +1,6 @@
 <script lang="ts">
+  import SearchComponent from "./SearchComponent.svelte";
+
   export let isOnEditPage: boolean;
 </script>
 
@@ -14,11 +16,8 @@
       <div id="pic-logo"></div>
     </a>
   </div>
-  <div class="flex w-1/4 items-center justify-end p-4 gap-4">
-    <a href="#" class="text-gray-600 flex items-center gap-1">
-      Search
-      <div id="pic-search"></div>
-    </a>
+  <div class="flex w-2/4 items-center justify-end p-4 gap-4">
+    <SearchComponent />
     <a href="#">
       <div id="pic-user"></div>
     </a>
@@ -26,14 +25,6 @@
 </div>
 
 <style>
-  #pic-search {
-    background-image: url("$lib/images/search.png");
-    background-position: center;
-    background-size: cover;
-    width: 16px;
-    height: 16px;
-  }
-
   #pic-logo {
     background-image: url("$lib/images/logo.png");
     background-position: center;
