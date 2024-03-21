@@ -76,13 +76,13 @@
       {/each}
     </div>
   </div>
-  <div class="w-1/4 flex items-center">
-	<div class="border-l-4 h-26">
-		<h2 class="text-lg p-2">
-		  This is your space to offer support and feedback. Remember to be
-		  constructive—there's a human behind this project. Have a question for the
-		  creator? Check this project's FAQ
-		</h2>
-	</div>
+  <div class="w-2/4 flex items-center pl-4">
+    <div class="border-l-4 h-26">
+      <h2 class="text-lg p-2">
+        This is your space to offer support and feedback. Remember to be
+        constructive—there's a human behind this project. Have a question for
+        the creator? Check this project's FAQ
+      </h2>
+    </div>
   </div>
 </div>

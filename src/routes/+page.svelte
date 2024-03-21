@@ -1,20 +1,68 @@
 <script>
-//   import Gun from "gun";
+  //   import Gun from "gun";
 
   import MainNavBar from "$lib/MainNavBar.svelte";
-
-//   let gun = Gun("http://localhost:8765/gun");
-//   gun.get("mark").put({
-//     name: "Mark",
-//     email: "mark@gun.eco",
-//   });
-
-//   gun.get("mark").on((data, key) => {
-//     console.log("realtime updates:", data);
-//   });
-//   setInterval(() => {
-//     gun.get("mark").get("live").put(Math.random());
-//   }, 9);
 </script>
 
-<MainNavBar isOnEditPage={false}/>
+<MainNavBar isOnEditPage={false} />
+<div class="header flex flex-col items-center justify-center">
+  <div class="flex flex-col items-center text-white">
+    <h2 class="h2">Discover, and collect</h2>
+    <h1 class="h1"><strong>extraordinary</strong> Companies</h1>
+    <p class="lead">Marketplace For Companies Tokens</p>
+  </div>
+</div>
+<div class="border-bottom service-section" id="features">
+  <div class="container px-5 my-5">
+    <div class="row gx-5 a">
+      <div class="col-lg-4 mb-5 mb-lg-0 flex-col section">
+        <div class="rounded-3 mb-3 icon bg-primary">
+          <div class="bi bi-wallet2 text-4xl"></div>
+        </div>
+        <h2 class="h4 fw-bolder">Set Up Your Wallet</h2>
+      </div>
+      <div class="col-lg-4 mb-5 mb-lg-0 section">
+        <div class="feature bg-gradient text-white rounded-3 mb-3 icon">
+          <div class="bi bi-building text-4xl"></div>
+        </div>
+        <h2 class="h4 fw-bolder">Add Your Companie</h2>
+      </div>
+      <div class="col-lg-4 section">
+        <div
+          class="feature bg-gradient text-white rounded-3 mb-3 icon bg-warning"
+        >
+          <div class="bi bi-grid text-4xl"></div>
+        </div>
+        <h2 class="h4 fw-bolder">List Them For Sale</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .header {
+    background-image: url("$lib/images/eth.jpg");
+    background-position: center;
+    background-size: cover;
+    height: 73vh;
+  }
+
+  strong {
+    color: transparent;
+    text-shadow: 2px 2px 1px white;
+  }
+  .section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+    width: 4rem;
+    background-color: purple;
+    border-radius: 0.313rem;
+  }
+</style>
