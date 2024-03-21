@@ -1,6 +1,7 @@
 <script>
   import MainNavBar from "$lib/MainNavBar.svelte";
   import EtheriumInput from "$lib/EtheriumInput.svelte";
+  import ConfirmationModal from "$lib/ConfirmationModal.svelte"
   import { deposit } from "$lib/walletConnect.js";
   export let data;
 
@@ -8,6 +9,8 @@
   let endPoint = "";
   let amount;
   let walletToRecive;
+  let confirmation = false;
+  let phrase = "";
 
   const fetchData = async ({
     amount,
@@ -44,6 +47,8 @@
 
   const depositSubmit = async () => {
     await deposit(data.project[0].project_contract_id, amount);
+	confirmation = true;
+	phrase = "deposit aproved";
   };
 
   const withdrawSubmit = async () => {
@@ -54,6 +59,8 @@
       contractAddress: data.project[0].project_contract_id,
       project_user_id: data.project[0].user_contract_id,
     });
+	confirmation = true;
+	phrase = "withdraw aproved";
   };
 
   const profitSubmit = async () => {
@@ -63,10 +70,13 @@
       contractAddress: data.project[0].project_contract_id,
       project_user_id: data.project[0].user_contract_id,
     });
+	confirmation = true;
+	phrase = "profit-sharing complete";
   };
 </script>
 
 <MainNavBar isOnEditPage={false} />
+<ConfirmationModal phrase=" backer this project" show={confirmation}/>
 <div class="w-full border-b items-center">
   <div class="w-full flex items-center p-8">
     <h1 class="text-5xl">Project actions</h1>

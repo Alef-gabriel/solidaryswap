@@ -4,6 +4,7 @@
   export let project;
   export let isActivated;
   export let userId;
+  export let isConfirmed;
 
   let form = {
     transaction: "",
@@ -34,9 +35,11 @@
 
   async function handleSubmit() {
     form.transaction = await buyTokens(project.project_contract_id, amount);
-    console.log(form.transaction);
-    await fetchData();
-	isActivated = false;
+    if(form.transaction){
+		await fetchData();
+		isActivated = false;
+		isConfirmed = true;
+	}
   }
 </script>
 
