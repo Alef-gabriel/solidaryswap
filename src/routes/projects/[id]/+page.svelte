@@ -4,7 +4,10 @@
   import { json } from "@sveltejs/kit";
   import { onMount } from "svelte";
   import { writable } from "svelte/store";
-  import BackerModal from "../../../lib/BackerModal.svelte";
+  import BackerModal from "$lib/BackerModal.svelte";
+  import CommentsSection from "$lib/CommentsSection.svelte";
+  import ConfirmationModal from "$lib/ConfirmationModal.svelte";
+  import LoadingAnimation from "../../../lib/LoadingAnimation.svelte";
   export let data;
 
   const project = data.project[0];
@@ -14,6 +17,9 @@
   let campaign = true;
   let image;
   let backed = false;
+  let confirmation = false;
+  let loading = true;
+  let page = "campaign";
 
   async function fetchMidia(link) {
     const response = await fetch(`https://${link}.ipfs.w3s.link/`);
@@ -27,17 +33,26 @@
   }
   //TODO: create a load
   onMount(async () => {
+    loading = true;
     if (project.video != "null") {
       video = await fetchMidia(project.video);
     }
     image = await fetchMidia(project.image);
+    loading = false;
     storyHtml.set(await fetchData(project.data));
   });
 </script>
 
 <MainNavBar isOnEditPage={false} />
-<BackerModal bind:isActivated={backed} {project} userId={data?.authedUser.id} />
-{#if data}
+<BackerModal
+  bind:isActivated={backed}
+  {project}
+  userId={data?.authedUser.id}
+  bind:isConfirmed={confirmation}
+/>
+<ConfirmationModal phrase=" backer this project" show={confirmation} />
+<LoadingAnimation bind:isLoading={loading} />
+{#if data && !loading}
   <div class="bg-gray-50 flex flex-col">
     <div class="flex flex-col justify-center p-8 items-center w-full h-36">
       <h1 class="text-3xl pb-4">{project.title}</h1>
@@ -52,13 +67,7 @@
             <track kind="captions" srclang="en" label="english_captions" />
           </video>
         {:else}
-          <img
-            id="pic-bunner"
-            src={image}
-            alt="bunner"
-            width="750"
-            height="450"
-          />
+          <img id="pic-bunner" src={image} alt="" width="750" height="450" />
         {/if}
       </div>
       <div class="flex flex-col gap-6 w-2/6">
@@ -97,53 +106,61 @@
       </div>
     </div>
   </div>
-  <StoryNavBar />
-  <div class="flex w-full">
-    <div class="sticky top-24 flex flex-col gap-4 w-1/4 p-4 h-56">
-      <a
-        href="#campaign"
-        on:click={() => {
-          campaign = true;
-        }}
-      >
-        <div class="flex items-center p-2 border-violet-600 hover:border-l-4">
-          <p class="text-lg text-gray-600 font-semibold">Story</p>
-        </div>
-      </a>
-      <a
-        href="#campaign"
-        on:click={() => {
-          campaign = false;
-        }}
-      >
-        <div class="flex items-center p-2 border-violet-600 hover:border-l-4">
-          <p class="text-lg text-gray-600 font-semibold">Risks</p>
-        </div>
-      </a>
-    </div>
-    <div class="w-2/4" id="campaign">
-      {#if campaign}
-        {@html $storyHtml.story}
-      {:else}
-        {$storyHtml.risks}
-      {/if}
-    </div>
-    <div class="sticky top-24 flex flex-col w-1/4 p-4 h-56">
-      <div class="w-full h-46 flex flex-col gap-4 border p-4">
-        <div id="pic-user" class=""></div>
-        <div>
-          <p class="text-lg text-gray-600 font-bold">{owner.name}</p>
-          <p class="text-gray-400">85 created . 165 backed</p>
-        </div>
-        <div>
-          <!-- biography -->
-          <p class="text-gray-400">
-            {owner.biography}
-          </p>
+  <StoryNavBar bind:pagination={page} />
+  {#if page == "comments"}
+    <CommentsSection
+      id="comments"
+      comments={data.comments}
+      userId={data.authedUser.id}
+      tableName={data.project[0].comments_table_name}
+    />
+  {:else if page == "campaign"}
+    <div id="campaign" class="flex w-full">
+      <div class="sticky top-24 flex flex-col gap-4 w-1/4 p-4 h-56">
+        <a
+          href="#campaign"
+          on:click={() => {
+            campaign = true;
+          }}
+        >
+          <div class="flex items-center p-2 border-violet-600 hover:border-l-4">
+            <p class="text-lg text-gray-600 font-semibold">Story</p>
+          </div>
+        </a>
+        <a
+          href="#campaign"
+          on:click={() => {
+            campaign = false;
+          }}
+        >
+          <div class="flex items-center p-2 border-violet-600 hover:border-l-4">
+            <p class="text-lg text-gray-600 font-semibold">Risks</p>
+          </div>
+        </a>
+      </div>
+      <div class="w-2/4" id="campaign">
+        {#if campaign}
+          {@html $storyHtml.story}
+        {:else}
+          {$storyHtml.risks}
+        {/if}
+      </div>
+      <div class="sticky top-24 flex flex-col w-1/4 p-4 h-56">
+        <div class="w-full h-46 flex flex-col gap-4 border p-4">
+          <div id="pic-user" class=""></div>
+          <div>
+            <p class="text-lg text-gray-600 font-bold">{owner.name}</p>
+            <p class="text-gray-400">85 created . 165 backed</p>
+          </div>
+          <div>
+            <p class="text-gray-400">
+              {owner.biography}
+            </p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  {/if}
 {/if}
 
 <style>
