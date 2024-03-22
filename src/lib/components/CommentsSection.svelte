@@ -1,34 +1,11 @@
 <script>
+  import { fetchData } from "$lib/fetchData.js";
   export let comments;
   export let userId;
   export let tableName;
 
   let addComment = false;
   let val = "";
-
-  console.log(comments);
-  const fetchData = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:5173/api/project/comments`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ comment: val, tableName, userId }),
-        }
-      );
-      if (response.ok) {
-        return await response.json();
-      } else {
-        const error = new Error(await response.text());
-        throw error;
-      }
-    } catch (error) {
-      throw error;
-    }
-  };
 </script>
 
 <div class="flex w-full">
@@ -54,8 +31,10 @@
       class="w-2/4 p-3 bg-gray-100 border focus:outline-none resize-none hover:border-gray-900"
       on:click={async () => {
         if (addComment) {
-          console.log("This is value ", val);
-          await fetchData();
+          await fetchData(
+            { comment: val, tableName, userId },
+            "http://localhost:5173/api/project/comments"
+          );
         }
         addComment = !addComment;
       }}>Add comment</button

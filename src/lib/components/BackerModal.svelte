@@ -1,6 +1,7 @@
 <script>
   import EtheriumInput from "./EtheriumInput.svelte";
   import { buyTokens } from "$lib/walletConnect.js";
+  import { fetchData } from "$lib/fetchData.js"
   export let project;
   export let isActivated;
   export let userId;
@@ -13,30 +14,10 @@
   };
 
   let amount;
-  const fetchData = async () => {
-    try {
-      const response = await fetch(`http://localhost:5173/api/project/backer`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
-      if (response.ok) {
-        return await response.json();
-      } else {
-        const error = new Error(await response.text());
-        throw error;
-      }
-    } catch (error) {
-      throw error;
-    }
-  };
-
   async function handleSubmit() {
     form.transaction = await buyTokens(project.project_contract_id, amount);
     if(form.transaction){
-		await fetchData();
+		await fetchData(form, "http://localhost:5173/api/project/backer");
 		isActivated = false;
 		isConfirmed = true;
 	}

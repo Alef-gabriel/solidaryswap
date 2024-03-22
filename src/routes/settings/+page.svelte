@@ -32,31 +32,11 @@
       form.image = await w3uploadFile(form.image);
     }
     console.log("Before image ");
-    const res = await fetchData();
+    const res = await fetchData(
+      form,
+      `http://localhost:5173/api/user-update/${data?.authedUser.id}`
+    );
     //navigation.goto(`story?id=${res.id}`);
-  };
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:5173/api/user-update/${data?.authedUser.id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(form),
-        }
-      );
-      if (response.ok) {
-        return await response.json();
-      } else {
-        const error = new Error(await response.text());
-        throw error;
-      }
-    } catch (error) {
-      throw error;
-    }
   };
 
   onMount(() => {

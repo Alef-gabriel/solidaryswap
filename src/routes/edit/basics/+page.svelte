@@ -8,6 +8,7 @@
   import { w3upDelegation } from "$lib/w3upDelegation.js";
   import { projectTableID } from "$lib/localStorage.js";
   import LoadingAnimation from "$lib/components/LoadingAnimation.svelte";
+  import { fetchData } from "$lib/fetchData.js";
 
   let principalSelectedCategory = writable();
   let principalSelectedSubCategory = "";
@@ -39,29 +40,12 @@
     if (form.video) {
       form.video = await w3uploadFile(form.video);
     }
-    const res = await fetchData();
+    const res = await fetchData(
+      form,
+      "http://localhost:5173/api/project/basics"
+    );
     projectTableID.set(res.id);
     navigation.goto(`story?id=${res.id}`);
-  };
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch("http://localhost:5173/api/project/basics", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
-      if (response.ok) {
-        return await response.json();
-      } else {
-        const error = new Error(await response.text());
-        throw error;
-      }
-    } catch (error) {
-      throw error;
-    }
   };
 
   onMount(() => {

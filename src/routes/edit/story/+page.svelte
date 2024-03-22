@@ -9,6 +9,7 @@
   import { w3upDelegation } from "$lib/w3upDelegation.js";
   import { projectTableID } from "$lib/localStorage.js";
   import LoadingAnimation from "$lib/components/LoadingAnimation.svelte";
+  import { fetchData } from "$lib/fetchData.js";
 
   let faqs = writable([]);
   const params = $page.url.searchParams.get("id");
@@ -58,32 +59,8 @@
       const jsonString = JSON.stringify(data);
       const blob = new Blob([jsonString], { type: "application/json" });
       const cid = await w3uploadFile(blob);
-      const res = await fetchData(cid, id);
+      const res = await fetchData({ data: cid }, `http://localhost:5173/api/project/story/${id}`);
       navigation.goto(`/projects/${res.id}`);
-    }
-  };
-
-  //TODO recive the project Id
-  const fetchData = async (cid, id) => {
-    try {
-      const response = await fetch(
-        `http://localhost:5173/api/project/story/${id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ data: cid }),
-        }
-      );
-      if (response.ok) {
-        return await response.json();
-      } else {
-        const error = new Error(await response.text());
-        throw error;
-      }
-    } catch (error) {
-      throw error;
     }
   };
 
