@@ -1,13 +1,13 @@
 <script>
-  import CategoriesSelector from "$lib/CategoriesSelector.svelte";
-  import EditProjectNavBar from "$lib/EditProjectNavBar.svelte";
-  import MainProjectNavBar from "$lib/MainProjectNavBar.svelte";
+  import CategoriesSelector from "$lib/components/CategoriesSelector.svelte";
+  import EditProjectNavBar from "$lib/components/EditProjectNavBar.svelte";
+  import MainProjectNavBar from "$lib/components/MainProjectNavBar.svelte";
   import { writable } from "svelte/store";
   import { onMount } from "svelte";
   import * as navigation from "$app/navigation";
   import { w3upDelegation } from "$lib/w3upDelegation.js";
   import { projectTableID } from "$lib/localStorage.js";
-  import LoadingAnimation from "$lib/LoadingAnimation.svelte";
+  import LoadingAnimation from "$lib/components/LoadingAnimation.svelte";
 
   let principalSelectedCategory = writable();
   let principalSelectedSubCategory = "";

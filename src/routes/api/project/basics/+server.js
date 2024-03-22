@@ -1,8 +1,8 @@
 import { Wallet, getDefaultProvider, ethers } from "ethers";
 import { json } from "@sveltejs/kit";
 import { PUBLIC_PROVIDER_URL } from "$env/static/public";
-import { backersTable } from "$lib/BackersTable.js";
-import { commentsTable } from "$lib/CommentsTable.js";
+import { backersTable } from "$lib/model/BackersTable.js";
+import { commentsTable } from "$lib/model/CommentsTable.js";
 import fs from "fs";
 import {
   SECRET_WALLET_PRIVATY_KEY,
@@ -21,6 +21,7 @@ export async function POST({ request }) {
   const compiled = JSON.parse(
     fs.readFileSync("artifacts/contracts/ProjectsTable.sol/ProjectsTable.json")
   );
+
   const signer = wallet.connect(provider);
   const contract = new ethers.Contract(
     SECRET_PROJECT_TABLE_CONTRACT,
@@ -30,7 +31,6 @@ export async function POST({ request }) {
   const backers_table_name = await backersTable();
   const comments_table_name = await commentsTable();
 
-  console.log("TABLES CREATED AND GO")
   await contract.insertIntoTable(
     "id,title,description,image,video,location,user_contract_id,backers_table_name,comments_table_name",
     `'${id}','${title}','${description}','${image}','${video}','${location}','${user_contract_id}','${backers_table_name}','${comments_table_name}'`

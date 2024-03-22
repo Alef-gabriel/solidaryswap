@@ -1,7 +1,7 @@
 <script>
-  import MainNavBar from "$lib/MainNavBar.svelte";
-  import EtheriumInput from "$lib/EtheriumInput.svelte";
-  import ConfirmationModal from "$lib/ConfirmationModal.svelte"
+  import MainNavBar from "$lib/components/MainNavBar.svelte";
+  import EtheriumInput from "$lib/components/EtheriumInput.svelte";
+  import ConfirmationModal from "$lib/components/ConfirmationModal.svelte"
   import { deposit } from "$lib/walletConnect.js";
   export let data;
 

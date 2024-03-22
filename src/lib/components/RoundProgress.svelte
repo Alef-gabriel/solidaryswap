@@ -1,5 +1,5 @@
 <script lang="ts">
-  const circumference = 2 * Math.PI * 90;
+  const circumference = 2 * Math.PI * 40;
   export let porcentage: number;
 </script>
 
@@ -14,7 +14,7 @@
       fill="transparent"
     ></circle>
     <circle
-      class="text-indigo-500 progress-ring__circle stroke-current"
+      class="text-violet-600 progress-ring__circle stroke-current"
       stroke-width="10"
       stroke-linecap="round"
       cx="50"
@@ -22,7 +22,7 @@
       r="40"
       fill="transparent"
       stroke-dasharray={circumference}
-      stroke-dashoffset={circumference - (porcentage / 100) * circumference}
+      stroke-dashoffset={circumference - (porcentage / 100) * Math.PI }
     ></circle>
 
     <text

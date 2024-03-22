@@ -1,6 +1,6 @@
 <script>
-  import MainProjectNavBar from "$lib/MainProjectNavBar.svelte";
-  import EditProjectNavBar from "$lib/EditProjectNavBar.svelte";
+  import MainProjectNavBar from "$lib/components/MainProjectNavBar.svelte";
+  import EditProjectNavBar from "$lib/components/EditProjectNavBar.svelte";
 </script>
 
 <MainProjectNavBar />

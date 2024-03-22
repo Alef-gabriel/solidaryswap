@@ -1,14 +1,14 @@
 <script>
   import { onMount } from "svelte";
   import { browser } from "$app/environment";
-  import MainProjectNavBar from "$lib/MainProjectNavBar.svelte";
-  import EditProjectNavBar from "$lib/EditProjectNavBar.svelte";
+  import MainProjectNavBar from "$lib/components/MainProjectNavBar.svelte";
+  import EditProjectNavBar from "$lib/components/EditProjectNavBar.svelte";
   import { writable } from "svelte/store";
   import * as navigation from "$app/navigation";
   import { page } from "$app/stores";
   import { w3upDelegation } from "$lib/w3upDelegation.js";
   import { projectTableID } from "$lib/localStorage.js";
-  import LoadingAnimation from "$lib/LoadingAnimation.svelte";
+  import LoadingAnimation from "$lib/components/LoadingAnimation.svelte";
 
   let faqs = writable([]);
   const params = $page.url.searchParams.get("id");

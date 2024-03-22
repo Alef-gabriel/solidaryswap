@@ -1,13 +1,13 @@
 <script>
-  import MainNavBar from "$lib/MainNavBar.svelte";
-  import StoryNavBar from "$lib/StoryNavBar.svelte";
+  import MainNavBar from "$lib/components/MainNavBar.svelte";
+  import StoryNavBar from "$lib/components/SearchComponent.svelte";
   import { json } from "@sveltejs/kit";
   import { onMount } from "svelte";
   import { writable } from "svelte/store";
-  import BackerModal from "$lib/BackerModal.svelte";
-  import CommentsSection from "$lib/CommentsSection.svelte";
-  import ConfirmationModal from "$lib/ConfirmationModal.svelte";
-  import LoadingAnimation from "../../../lib/LoadingAnimation.svelte";
+  import BackerModal from "$lib/components/BackerModal.svelte";
+  import CommentsSection from "$lib/components/CommentsSection.svelte";
+  import ConfirmationModal from "$lib/components/ConfirmationModal.svelte";
+  import LoadingAnimation from "$lib/components/LoadingAnimation.svelte";
   export let data;
 
   const project = data.project[0];

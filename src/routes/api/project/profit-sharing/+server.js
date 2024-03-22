@@ -8,7 +8,7 @@ import { validateToken } from "$lib/validateToken.js";
 export async function POST({ request, cookies }) {
   const { contractAddress, amount, project_user_id } = await request.json();
 
-  const authToken = cookies.get("authToken")
+  const authToken = cookies.get("authToken");
   const user = await validateToken(authToken);
 
   if (user == undefined || user.id != project_user_id) {

@@ -1,7 +1,7 @@
 <script>
   //   import Gun from "gun";
 
-  import MainNavBar from "$lib/MainNavBar.svelte";
+  import MainNavBar from "$lib/components/MainNavBar.svelte";
 </script>
 
 <MainNavBar isOnEditPage={false} />

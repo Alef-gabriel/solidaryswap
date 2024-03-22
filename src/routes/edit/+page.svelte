@@ -1,6 +1,6 @@
 <script>
-  import MainNavBar from "$lib/MainNavBar.svelte";
-  import RoundProgress from "$lib/RoundProgress.svelte";
+  import MainNavBar from "$lib/components/MainNavBar.svelte";
+  import RoundProgress from "$lib/components/RoundProgress.svelte";
 </script>
 
 <MainNavBar isOnEditPage={true}/>

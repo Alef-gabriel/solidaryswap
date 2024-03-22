@@ -1,6 +1,6 @@
 <script>
   import { businessAreas } from "$lib";
-  import MainNavBar from "$lib/MainNavBar.svelte";
+  import MainNavBar from "$lib/components/MainNavBar.svelte";
   import * as navigation from "$app/navigation";
   export let data;
 
