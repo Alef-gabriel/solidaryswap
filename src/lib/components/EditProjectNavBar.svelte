@@ -30,21 +30,21 @@
 
 <div class="top-0 w-full h-24 bg-white flex shadow items-center justify-center">
 	<div class="flex flex-col w-1/6 gap-1 items-center hover:border-b-2 border-violet-600">
-		<a href="#">
+		<a href="/edit/basics" class="flex flex-col items-center hover:no-underline">
 			<div id="pic-basic"></div>
+			<p class="text-lg text-gray-600">Basics</p>
 		</a>
-		<p class="text-lg text-gray-600">Basics</p>
 	</div>
 	<div class="flex flex-col w-1/6 gap-1 items-center hover:border-b-2 border-violet-600">
-		<a href="#">
+		<a href="/edit/story" class="flex flex-col items-center hover:no-underline">
 			<div id="pic-story"></div>
+			<p class="text-lg text-gray-600">Story</p>
 		</a>
-		<p class="text-lg text-gray-600">Story</p>
 	</div>
 	<div class="flex flex-col w-1/6 gap-1 items-center hover:border-b-2 border-violet-600">
-		<a href="#">
+		<a href="/edit/people" class="flex flex-col items-center hover:no-underline">
 			<div id="pic-people"></div>
+			<p class="text-lg text-gray-600">People</p>
 		</a>
-		<p class="text-lg text-gray-600">People</p>
 	</div>
 </div>

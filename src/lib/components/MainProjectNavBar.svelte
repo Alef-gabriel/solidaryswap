@@ -4,10 +4,10 @@
 
 <div class="sticky top-0 w-full h-20 bg-white flex border-b">
   <div class="flex w-2/4 gap-4 items-center">
-    <a href="#">
+    <a href="/">
       <div id="pic-logo"></div>
     </a>
-    <a href="#" class="text-gray-600">Small Batch Project</a>
+    <a href="/edit" class="text-gray-600">Small Batch Project</a>
   </div>
   <div class="flex w-2/4 items-center justify-end p-8 gap-8">
     <button

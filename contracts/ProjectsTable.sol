@@ -34,6 +34,9 @@ contract ProjectsTable is ERC721Holder {
                 "user_contract_id text,"
 				"backers_table_name text,"
 				"comments_table_name text,"
+				"category text,"
+				"sub_category text,"
+				"goal text,"
 				"project_contract_id text",
                _TABLE_PREFIX
             )

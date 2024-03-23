@@ -16,9 +16,9 @@
       <div id="pic-logo"></div>
     </a>
   </div>
-  <div class="flex w-2/4 items-center justify-end p-4 gap-4">
+  <div class="flex w-1/4 items-center justify-end p-4 gap-4">
     <SearchComponent />
-    <a href="#">
+    <a href="/settings">
       <div id="pic-user"></div>
     </a>
   </div>

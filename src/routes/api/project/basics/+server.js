@@ -10,8 +10,17 @@ import {
 } from "$env/static/private";
 
 export async function POST({ request }) {
-  const { title, description, image, video, location, user_contract_id } =
-    await request.json();
+  const {
+    title,
+    description,
+    image,
+    video,
+    location,
+    user_contract_id,
+    category,
+    subCategory,
+    goal,
+  } = await request.json();
   const id = btoa(title);
 
   const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
@@ -32,8 +41,8 @@ export async function POST({ request }) {
   const comments_table_name = await commentsTable();
 
   await contract.insertIntoTable(
-    "id,title,description,image,video,location,user_contract_id,backers_table_name,comments_table_name",
-    `'${id}','${title}','${description}','${image}','${video}','${location}','${user_contract_id}','${backers_table_name}','${comments_table_name}'`
+    "id,title,description,image,video,location,user_contract_id,backers_table_name,comments_table_name, category, sub_category, goal",
+    `'${id}','${title}','${description}','${image}','${video}','${location}','${user_contract_id}','${backers_table_name}','${comments_table_name}','${category}','${subCategory}','${goal}'`
   );
   console.log(await contract.getTableName());
   return new Response(JSON.stringify({ id: id }), { status: 200 });
