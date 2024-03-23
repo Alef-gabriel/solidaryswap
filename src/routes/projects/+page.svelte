@@ -1,9 +1,12 @@
 <script>
   import { businessAreas } from "$lib";
   import MainNavBar from "$lib/components/MainNavBar.svelte";
+  import { onMount } from "svelte";
   import * as navigation from "$app/navigation";
+  import { getEthPrice } from "$lib/ethUltils.js";
+  import { contractBalance } from "$lib/contractBalance.js";
   export let data;
-
+  let ethPrice;
   let page = 0;
 
   const handlePageChange = (newPageNumber) => {
@@ -16,6 +19,22 @@
       targetElement.hidden = !targetElement.hidden;
     }
   }
+
+  async function balanceInEth(contractId) {
+    const ethBalance = await contractBalance(contractId);
+	console.log(ethBalance)
+    return ethPrice * ethBalance;
+  }
+
+  async function balanceToPercent(contractId, goal) {
+    const ethBalance = await contractBalance(contractId);
+    const totalGoal = ethPrice * goal;
+    return (ethBalance / totalGoal) * 100;
+  }
+
+  onMount(async () => {
+    ethPrice = await getEthPrice();
+  });
 </script>
 
 <MainNavBar isOnEditPage={false} />
@@ -67,25 +86,27 @@
                 {project.title}
               </h1>
               <p class="text-gray-400 text-sm">
-                Drive your ampersand RPG players wild with these new critical
-                success and failure cards. Designed by Lex Morgan and Philip
-                Reed.
+                {project.description}
               </p>
             </div>
             <div
               class="flex flex-col w-1/4 border-l-2 gap-1 p-2 h-full border-violet-400"
             >
-              <h2 class="text-xl text-violet-600 font-semibold">
-                US$ 1,745 pledged
-              </h2>
-              <p class="text-gray-400 text-sm">148% funded</p>
-              <a href="#" class="text-violet-500 text-sm underline"
-                >Video Games</a
+              {#await balanceInEth(project.project_contract_id) then balance}
+                <h2 class="text-xl text-violet-600 font-semibold">
+                  US$ {balance} pledged
+                </h2>
+              {/await}
+              {#await balanceToPercent(project.project_contract_id, project.goal) then percent}
+                <p class="text-gray-400 text-sm">{percent}% funded</p>
+              {/await}
+              <a href="" class="text-violet-500 text-sm underline"
+                >{project.category}</a
               >
               <div class="flex gap-1">
                 <div id="pic-location"></div>
                 <p class="text-violet-400 text-sm underline">
-                  Sao Paulo, Brazil
+                  {project.location}
                 </p>
               </div>
             </div>
@@ -103,7 +124,7 @@
                 if (page > 0) handlePageChange(page);
               }}
               class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
-              href="#"
+              href=""
               aria-label="Previous"
             >
               <span aria-hidden="true">&laquo;</span>
@@ -116,7 +137,7 @@
                   handlePageChange(i);
                 }}
                 class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
-                href="#">{i}</a
+                href="">{i}</a
               >
             </li>
           {/each}
@@ -126,8 +147,8 @@
                 page++;
                 handlePageChange(page);
               }}
-              class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:focus:text-primary-500 dark:active:bg-neutral-700 dark:active:text-primary-500"
-              href="#"
+              class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-surface transition duration-300 hover:bg-neutral-100 focus:bg-neutral-100 focus:text-primary-700 focus:outline-none active:bg-neutral-100 active:text-primary-700"
+              href=""
               aria-label="Next"
               ><span aria-hidden="true">&raquo;</span>
             </a>

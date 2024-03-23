@@ -1,6 +1,6 @@
 <script>
   import MainNavBar from "$lib/components/MainNavBar.svelte";
-  import StoryNavBar from "$lib/components/SearchComponent.svelte";
+  import StoryNavBar from "$lib/components/StoryNavBar.svelte";
   import { json } from "@sveltejs/kit";
   import { onMount } from "svelte";
   import { writable } from "svelte/store";
@@ -8,6 +8,7 @@
   import CommentsSection from "$lib/components/CommentsSection.svelte";
   import ConfirmationModal from "$lib/components/ConfirmationModal.svelte";
   import LoadingAnimation from "$lib/components/LoadingAnimation.svelte";
+  import { getEthPrice } from "$lib/ethUltils.js";
   export let data;
 
   const project = data.project[0];
@@ -20,6 +21,7 @@
   let confirmation = false;
   let loading = true;
   let page = "campaign";
+  let balance;
 
   async function fetchMidia(link) {
     const response = await fetch(`https://${link}.ipfs.w3s.link/`);
@@ -32,7 +34,12 @@
     return await response.json();
   }
   //TODO: create a load
+
   onMount(async () => {
+    const ethPrice = await getEthPrice();
+    balance = ethPrice * data.balance;
+	project.goal = (project.goal * ethPrice).toFixed(2)
+
     loading = true;
     if (project.video != "null") {
       video = await fetchMidia(project.video);
@@ -75,16 +82,12 @@
           <div class="h-2.5 bg-violet-600" style="width: 45%"></div>
         </div>
         <div>
-          <h2 class="text-3xl text-violet-600 font-semibold">US$ 1,745</h2>
-          <p class="text-gray-500">pledged of US$ 250 goal</p>
+          <h2 class="text-3xl text-violet-600 font-semibold">US$ {balance}</h2>
+          <p class="text-gray-500">pledged of US$ {project.goal} goal</p>
         </div>
         <div>
           <h2 class="text-3xl text-violet-600 font-semibold">161</h2>
           <p class="text-gray-500">backers</p>
-        </div>
-        <div>
-          <h2 class="text-3xl text-violet-600 font-semibold">4</h2>
-          <p class="text-gray-500">proposals</p>
         </div>
         <div class="flex flex-col gap-4">
           <!-- <WalletConnect buttonLabel={"Back this project"} /> -->

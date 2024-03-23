@@ -9,6 +9,7 @@ contract Project is ERC20, Ownable {
     using Math for uint256;
 
     address payable[] public backers;
+	mapping(address => address) public backersAddres;
 
     event Bought(address buyer, uint256 amountOfETH, uint256 amountOfTokens);
     event Withdraw(uint256 amount, address payable recipient);
@@ -17,6 +18,7 @@ contract Project is ERC20, Ownable {
     constructor(address initialOwner) ERC20("Gold", "GLD") Ownable(initialOwner) {}
 
 	function addBacker(address payable newBacker) internal {
+		backersAddres[newBacker] = newBacker;
         backers.push(newBacker);
     }
 
@@ -25,9 +27,10 @@ contract Project is ERC20, Ownable {
 
         uint256 amountToBuy = msg.value;
         _mint(msg.sender, amountToBuy);
-        addBacker(payable(msg.sender));
+		if (backersAddres[msg.sender] != msg.sender) {
+        	addBacker(payable(msg.sender));
+		}
         emit Bought(msg.sender, msg.value, amountToBuy);
-
         return amountToBuy;
     }
     function getAddressCount() public view returns (uint256) {
