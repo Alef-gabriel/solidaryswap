@@ -17,6 +17,7 @@ export const actions = {
     const data = await request.formData();
     const email = data.get("email");
     const password = data.get("password");
+	const name = data.get("name");
 
     const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
     const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
@@ -37,8 +38,8 @@ export const actions = {
     const id = btoa(encryptedEmail);
 
     await contract.insertIntoTable(
-      "id,password, email",
-      `'${id}','${hash}','${encryptedEmail}'`
+      "id,password, email, name",
+      `'${id}','${hash}','${encryptedEmail}','${name}'`
     );
     const authToken = jwt.sign({ authUser: id }, SECRET_INGREDIENT, {
       expiresIn: "24h",
