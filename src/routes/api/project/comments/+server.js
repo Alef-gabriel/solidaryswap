@@ -14,7 +14,6 @@ async function getCommentsId(db, comments_table_name) {
 export async function POST({ request }) {
   const { tableName, userId, comment } = await request.json();
 
-  console.log("I'm Here omen");
   const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
   const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
   const signer = wallet.connect(provider);
@@ -28,6 +27,5 @@ export async function POST({ request }) {
     .bind(id, userId, comment)
     .run();
   await insert.txn?.wait();
-  console.log("finish pai");
   return new Response(JSON.stringify({ res: "Susses" }), { status: 200 });
 }

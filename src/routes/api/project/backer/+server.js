@@ -24,7 +24,6 @@ async function isValidTransaction(provider, transaction) {
 export async function POST({ request }) {
   const { tableName, transaction, user_id } = await request.json();
 
-  console.log("I'm Here omen");
   const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
   const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
   const signer = wallet.connect(provider);
@@ -41,6 +40,5 @@ export async function POST({ request }) {
     .bind(id, user_id)
     .run();
   await insert.txn?.wait();
-  console.log("finish pai");
   return new Response(JSON.stringify({ res: "Susses" }), { status: 200 });
 }

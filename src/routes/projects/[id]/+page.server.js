@@ -64,7 +64,7 @@ export const load = async ({ params, locals }) => {
     if (locals.authedUser) {
       authedUser = locals.authedUser;
     }
-    console.log("Locals o Project ", authedUser);
+
     return authedUser;
   };
 

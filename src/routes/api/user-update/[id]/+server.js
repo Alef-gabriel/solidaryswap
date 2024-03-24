@@ -26,6 +26,5 @@ export async function POST({ request, params }) {
     `'${params.id}'`,
     `name='${name}',biography='${biography}',image='${image}',location='${location}'`
   );
-  console.log(await contract.getTableName());
   return new Response(JSON.stringify({ message: "Created" }), { status: 200 });
 }

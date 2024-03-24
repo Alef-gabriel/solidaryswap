@@ -26,7 +26,6 @@ export async function POST({ request }) {
   const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
   const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
 
-  console.log(SECRET_PROJECT_TABLE_CONTRACT);
   const compiled = JSON.parse(
     fs.readFileSync("artifacts/contracts/ProjectsTable.sol/ProjectsTable.json")
   );

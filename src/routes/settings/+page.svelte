@@ -20,18 +20,15 @@
 
   const w3uploadFile = async (file) => {
     const web3Client = await w3upDelegation();
-    console.log("before delegation");
     const cid = await web3Client.uploadFile(file);
     return cid.toString();
   };
 
   //TODO:create a loading
   const handleSubmit = async () => {
-    console.log("Here a'im here ");
     if (form.image) {
       form.image = await w3uploadFile(form.image);
     }
-    console.log("Before image ");
     const res = await fetchData(
       form,
       `http://localhost:5173/api/user-update/${data?.authedUser.id}`

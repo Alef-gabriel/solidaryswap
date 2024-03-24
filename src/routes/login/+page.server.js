@@ -15,7 +15,7 @@ export const actions = {
 
     const encryptedEmail = AES.encrypt(email, SECRET_PASSPHRASE);
     const user = await findUserByEmail(encryptedEmail);
-	console.log(user)
+
     const authAttempt = await bcrypt.compare(password, user.password);
     if (!authAttempt) {
       return new Response(
