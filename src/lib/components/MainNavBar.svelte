@@ -1,7 +1,9 @@
-<script lang="ts">
+<script>
   import SearchComponent from "./SearchComponent.svelte";
+  import { fetchMidia } from "$lib/ethUltils.js";
 
-  export let isOnEditPage: boolean;
+  export let isOnEditPage;
+  export let userImage;
 </script>
 
 <div class="top-0 w-full h-16 bg-white flex border-b">
@@ -19,7 +21,13 @@
   <div class="flex w-1/4 items-center justify-end p-4 gap-4">
     <SearchComponent />
     <a href="/settings">
-      <div id="pic-user"></div>
+      {#await fetchMidia(userImage) then image}
+        {#if image}
+          <img id="pic-user-image" src={image} alt="" width="36" height="36" />
+        {:else}
+          <div id="pic-user"></div>
+        {/if}
+      {/await}
     </a>
   </div>
 </div>

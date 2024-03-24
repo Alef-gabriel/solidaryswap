@@ -6,7 +6,6 @@ export async function buyTokens(encodedAddress, amount) {
     const decodedAddress = ethers.utils.getAddress(encodedAddress);
     // Create a Web3Provider
     let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    console.log("Address of contract: ", decodedAddress);
     // Request account access (prompts user)
     await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
