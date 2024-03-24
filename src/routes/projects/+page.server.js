@@ -1,10 +1,28 @@
 import { Database } from "@tableland/sdk";
 import { Wallet, getDefaultProvider } from "ethers";
 import { PUBLIC_PROVIDER_URL } from "$env/static/public";
+import { getEthPrice } from "$lib/ethUltils.js";
 import {
   SECRET_WALLET_PRIVATY_KEY,
   SECRET_PROJECT_TABLE_NAME,
 } from "$env/static/private";
+
+function handleFilter(search, filters) {
+  const filterArray = filters.split(",");
+  const formattedFilters = filterArray
+    .map((filter, index) => {
+      return index === 0 ? `'${filter}'` : `,'${filter}'`;
+    })
+    .join("");
+
+  let where = "WHERE";
+  if (search) where = "AND";
+  const preparedFilters =
+    where +
+    ` category IN (${formattedFilters})
+		OR sub_category IN (${formattedFilters}) `;
+  return preparedFilters;
+}
 
 export const load = async ({ url }) => {
   const fetchProjects = async () => {
@@ -14,9 +32,14 @@ export const load = async ({ url }) => {
 
     let originalSearch = " ";
     const search = url.searchParams.get("search");
-    if (search != undefined && search != "undefined")
+    if (search) {
       originalSearch = ` WHERE title='${search}'`;
-
+    }
+    let originalFilters = "";
+    const filters = url.searchParams.get("filters");
+    if (filters) {
+      originalFilters = handleFilter(search, filters);
+    }
     const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
     const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
 
@@ -27,6 +50,7 @@ export const load = async ({ url }) => {
       .prepare(
         `SELECT * FROM ${SECRET_PROJECT_TABLE_NAME}` +
           originalSearch +
+          originalFilters +
           `LIMIT 10 OFFSET ${(originalPageNumber - 1) * 10}`
       )
       .all();
@@ -35,5 +59,6 @@ export const load = async ({ url }) => {
 
   return {
     projects: await fetchProjects(),
+    ethPrice: await getEthPrice(),
   };
 };

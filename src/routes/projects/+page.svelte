@@ -1,17 +1,39 @@
 <script>
   import { businessAreas } from "$lib";
   import MainNavBar from "$lib/components/MainNavBar.svelte";
-  import { onMount } from "svelte";
-  import * as navigation from "$app/navigation";
-  import { getEthPrice } from "$lib/ethUltils.js";
+  import { goto } from "$app/navigation";
   import { contractBalance } from "$lib/contractBalance.js";
+  import { fetchMidia } from "$lib/ethUltils.js";
   export let data;
-  let ethPrice;
+  let filters = [];
   let page = 0;
 
   const handlePageChange = (newPageNumber) => {
-    navigation.goto(`/projects?page=${newPageNumber}`);
+    const currentUrl = window.location.pathname + window.location.search;
+    const newUrl = currentUrl.includes("?")
+      ? `${currentUrl}&page=${newPageNumber}`
+      : `${currentUrl}?page=${newPageNumber}`;
+    goto(newUrl);
   };
+
+  function manageFilters(subArea) {
+    const index = filters.indexOf(subArea);
+    if (index !== -1) {
+      filters.splice(index, 1);
+    } else {
+      filters.push(subArea);
+    }
+    let newUrl;
+    const currentUrl = window.location.pathname + window.location.search;
+    if (filters.length == 0) {
+      newUrl = "/projects";
+    } else {
+      newUrl = currentUrl.includes("?")
+        ? `${currentUrl}&filters=${filters}`
+        : `${currentUrl}?filters=${filters}`;
+    }
+    goto(newUrl);
+  }
 
   function showFilter(id) {
     const targetElement = document.getElementById(id);
@@ -22,19 +44,13 @@
 
   async function balanceInEth(contractId) {
     const ethBalance = await contractBalance(contractId);
-	console.log(ethBalance)
-    return ethPrice * ethBalance;
+    return data.ethPrice * ethBalance;
   }
 
-  async function balanceToPercent(contractId, goal) {
-    const ethBalance = await contractBalance(contractId);
-    const totalGoal = ethPrice * goal;
-    return (ethBalance / totalGoal) * 100;
+  function balanceToPercent(value, goal) {
+    const totalGoal = data.ethPrice * goal;
+    return (value / totalGoal) * 100;
   }
-
-  onMount(async () => {
-    ethPrice = await getEthPrice();
-  });
 </script>
 
 <MainNavBar isOnEditPage={false} />
@@ -57,15 +73,22 @@
         class="z-10 w-full p-3 bg-gray-50 rounded-lg shadow"
       >
         <ul class="space-y-2 text-sm" aria-labelledby="dropdownDefault">
-          {#each area.subAreas as subAreas}
-            <li class="flex items-center" value={subAreas}>
+          {#each area.subAreas as subArea}
+            <li class="flex items-center" value={subArea}>
               <div class="flex">
-                <input type="checkbox" id={subAreas} class="peer hidden" />
+                <input
+                  on:click={() => {
+                    manageFilters(subArea);
+                  }}
+                  type="checkbox"
+                  id={subArea}
+                  class="peer hidden"
+                />
                 <label
-                  for={subAreas}
+                  for={subArea}
                   class="select-none cursor-pointer rounded-lg border border-violet-400
 					 py-2 px-3 font-bol transition-colors duration-200 ease-in-out peer-checked:bg-violet-200 peer-checked:border-violet-600"
-                  >{subAreas}</label
+                  >{subArea}</label
                 >
               </div>
             </li>
@@ -80,36 +103,42 @@
       {#each data.projects as project}
         <a href="/projects/{project.id}">
           <div class="flex items-start p-4 shadow">
-            <div id="pic-bunner"></div>
-            <div class="flex flex-col justify-center pl-4 items-center w-3/4">
-              <h1 class="text-2xl pb-2 font-semibold">
-                {project.title}
-              </h1>
-              <p class="text-gray-400 text-sm">
-                {project.description}
-              </p>
-            </div>
-            <div
-              class="flex flex-col w-1/4 border-l-2 gap-1 p-2 h-full border-violet-400"
-            >
-              {#await balanceInEth(project.project_contract_id) then balance}
-                <h2 class="text-xl text-violet-600 font-semibold">
-                  US$ {balance} pledged
-                </h2>
-              {/await}
-              {#await balanceToPercent(project.project_contract_id, project.goal) then percent}
-                <p class="text-gray-400 text-sm">{percent}% funded</p>
-              {/await}
-              <a href="" class="text-violet-500 text-sm underline"
-                >{project.category}</a
-              >
-              <div class="flex gap-1">
-                <div id="pic-location"></div>
-                <p class="text-violet-400 text-sm underline">
-                  {project.location}
-                </p>
-              </div>
-            </div>
+            {#await fetchMidia(project.image) then image}
+              <img id="pic-bunner" src={image} alt="" width="96" height="96" />
+              {#if image}
+                <div
+                  class="flex flex-col justify-center pl-4 items-center w-3/4"
+                >
+                  <h1 class="text-2xl pb-2 font-semibold">
+                    {project.title}
+                  </h1>
+                  <p class="text-gray-400 text-sm">
+                    {project.description}
+                  </p>
+                </div>
+                <div
+                  class="flex flex-col w-1/4 border-l-2 gap-1 p-2 h-full border-violet-400"
+                >
+                  {#await balanceInEth(project.project_contract_id) then balance}
+                    <h2 class="text-xl text-violet-600 font-semibold">
+                      US$ {balance} pledged
+                    </h2>
+                    <p class="text-gray-400 text-sm">
+                      {balanceToPercent(balance, project.goal)}% funded
+                    </p>
+                  {/await}
+                  <a href="" class="text-violet-500 text-sm underline"
+                    >{project.category}</a
+                  >
+                  <div class="flex gap-1">
+                    <div id="pic-location"></div>
+                    <p class="text-violet-400 text-sm underline">
+                      {project.location}
+                    </p>
+                  </div>
+                </div>
+              {/if}
+            {/await}
           </div>
         </a>
       {/each}
@@ -160,14 +189,6 @@
 </div>
 
 <style>
-  #pic-bunner {
-    background-image: url("$lib/images/bunner_teste.jpg");
-    background-position: center;
-    background-size: cover;
-    width: 96px;
-    height: 96px;
-  }
-
   #pic-location {
     background-image: url("$lib/images/location.png");
     background-position: center;
