@@ -1,10 +1,11 @@
+import { redirect } from "@sveltejs/kit";
+
 export async function load({ locals }) {
   const getLocals = () => {
-    let authedUser = undefined;
-    if (locals.authedUser) {
-      authedUser = locals.authedUser;
+    let authedUser = locals.authedUser;
+    if (!authedUser) {
+      throw redirect(302, "/login");
     }
-    console.log("Locals ", authedUser);
     return authedUser;
   };
   return {
