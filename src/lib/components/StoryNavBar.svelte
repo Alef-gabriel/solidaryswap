@@ -1,5 +1,6 @@
 <script>
   export let pagination;
+  export let backerFunction = () => {};
 </script>
 
 <div class="sticky top-0 w-full h-20 bg-white flex border">
@@ -25,7 +26,7 @@
         on:click={() => {
           pagination = "faq";
         }}
-        href=""
+        href="#faq"
         class="hover:no-underline"
       >
         <div id="pic-story"></div>
@@ -63,6 +64,7 @@
   </div>
   <div class="flex w-2/4 items-center justify-end p-8 gap-8">
     <button
+      on:click={backerFunction}
       class="bg-violet-600 hover:bg-violet-700 text-white py-2 px-3 w-1/4"
     >
       Back this project

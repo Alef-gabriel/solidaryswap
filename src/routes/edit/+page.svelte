@@ -6,7 +6,7 @@
 <MainNavBar isOnEditPage={true}/>
 <div class="flex flex-col p-8">
   <h2 class="text-2xl pb-4">Project overview</h2>
-  <a href="#">
+  <a href="/basics">
     <div class="flex p-4 items-center border gap-2">
       <RoundProgress porcentage={50} />
       <div>
@@ -18,7 +18,7 @@
       </div>
     </div>
   </a>
-  <a href="#">
+  <a href="/story">
     <div class="flex p-4 items-center border gap-2">
       <RoundProgress porcentage={90} />
       <div>
@@ -30,7 +30,7 @@
       </div>
     </div>
   </a>
-  <a href="#">
+  <a href="/people">
     <div class="flex p-4 items-center border gap-2">
       <RoundProgress porcentage={20} />
       <div>

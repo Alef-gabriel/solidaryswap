@@ -16,7 +16,7 @@
       }
       isHiden = false;
     }}
-    href="#"
+    href=""
     class="text-gray-600 flex items-center gap-1"
   >
     Search

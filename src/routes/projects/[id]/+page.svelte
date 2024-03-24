@@ -8,7 +8,8 @@
   import CommentsSection from "$lib/components/CommentsSection.svelte";
   import ConfirmationModal from "$lib/components/ConfirmationModal.svelte";
   import LoadingAnimation from "$lib/components/LoadingAnimation.svelte";
-  import { getEthPrice } from "$lib/ethUltils.js";
+  import { getEthPrice, fetchMidia } from "$lib/ethUltils.js";
+  import FaqsComponent from "../../../lib/components/FaqsComponent.svelte";
   export let data;
 
   const project = data.project[0];
@@ -22,23 +23,17 @@
   let loading = true;
   let page = "campaign";
   let balance;
-
-  async function fetchMidia(link) {
-    const response = await fetch(`https://${link}.ipfs.w3s.link/`);
-    const blob = await response.blob();
-    return URL.createObjectURL(blob);
-  }
+  let goal;
 
   async function fetchData(link) {
     const response = await fetch(`https://${link}.ipfs.w3s.link/`);
     return await response.json();
   }
-  //TODO: create a load
 
   onMount(async () => {
     const ethPrice = await getEthPrice();
     balance = ethPrice * data.balance;
-	project.goal = (project.goal * ethPrice).toFixed(2)
+    goal = (project.goal * ethPrice).toFixed(2);
 
     loading = true;
     if (project.video != "null") {
@@ -79,14 +74,17 @@
       </div>
       <div class="flex flex-col gap-6 w-2/6">
         <div class="w-full h-2.5 bg-gray-200">
-          <div class="h-2.5 bg-violet-600" style="width: 45%"></div>
+          <div
+            class="h-2.5 bg-violet-600"
+            style="width: {(balance / goal) * 100}%"
+          ></div>
         </div>
         <div>
           <h2 class="text-3xl text-violet-600 font-semibold">US$ {balance}</h2>
-          <p class="text-gray-500">pledged of US$ {project.goal} goal</p>
+          <p class="text-gray-500">pledged of US$ {goal} goal</p>
         </div>
         <div>
-          <h2 class="text-3xl text-violet-600 font-semibold">161</h2>
+          <h2 class="text-3xl text-violet-600 font-semibold">{data.backers}</h2>
           <p class="text-gray-500">backers</p>
         </div>
         <div class="flex flex-col gap-4">
@@ -109,7 +107,12 @@
       </div>
     </div>
   </div>
-  <StoryNavBar bind:pagination={page} />
+  <StoryNavBar
+    backerFunction={() => {
+      backed = true;
+    }}
+    bind:pagination={page}
+  />
   {#if page == "comments"}
     <CommentsSection
       id="comments"
@@ -142,27 +145,49 @@
         </a>
       </div>
       <div class="w-2/4" id="campaign">
-        {#if campaign}
-          {@html $storyHtml.story}
+        {#if $storyHtml}
+          {#if campaign}
+            {@html $storyHtml.story}
+          {:else}
+            {$storyHtml.risks}
+          {/if}
         {:else}
-          {$storyHtml.risks}
+          <h1 class="text-2xl text-violet-400 pt-8">Owner don't set it</h1>
         {/if}
       </div>
       <div class="sticky top-24 flex flex-col w-1/4 p-4 h-56">
         <div class="w-full h-46 flex flex-col gap-4 border p-4">
-          <div id="pic-user" class=""></div>
+          {#await fetchMidia(owner.image) then userImage}
+            {#if userImage}
+              <img
+                id="pic-user-image"
+                src={userImage}
+                alt=""
+                width="76"
+                height="76"
+              />
+            {:else}
+              <div id="pic-user"></div>
+            {/if}
+          {/await}
           <div>
             <p class="text-lg text-gray-600 font-bold">{owner.name}</p>
-            <p class="text-gray-400">85 created . 165 backed</p>
+            <!-- <p class="text-gray-400">85 created . 165 backed</p> -->
           </div>
           <div>
             <p class="text-gray-400">
-              {owner.biography}
+              {#if owner.biography}
+                {owner.biography}
+              {:else}
+                User don't have biography
+              {/if}
             </p>
           </div>
         </div>
       </div>
     </div>
+  {:else if page == "faq"}
+    <FaqsComponent faqs={$storyHtml.faqs} />
   {/if}
 {/if}
 

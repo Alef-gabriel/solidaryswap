@@ -30,7 +30,7 @@
             on:click={() => {
               show = false;
             }}
-            href="#"
+            href=""
             class="px-12 bg-violet-600 hover:bg-violet-500 text-white font-semibold py-3"
           >
             GO BACK

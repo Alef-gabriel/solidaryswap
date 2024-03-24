@@ -7,12 +7,12 @@
 <div class="top-0 w-full h-16 bg-white flex border-b">
   <div class="flex w-1/4 items-center p-4 gap-4">
     {#if !isOnEditPage}
-      <a href="#" class="text-gray-600">Discover</a>
-      <a href="#" class="text-gray-600">Start a project</a>
+      <a href="/projects" class="text-gray-600">Discover</a>
+      <a href="/edit/basics" class="text-gray-600">Start a project</a>
     {/if}
   </div>
   <div class="flex w-3/4 gap-4 items-center justify-center">
-    <a href="#">
+    <a href="/">
       <div id="pic-logo"></div>
     </a>
   </div>

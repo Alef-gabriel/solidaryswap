@@ -19,3 +19,12 @@ export async function getEthPrice() {
     return null;
   }
 }
+
+export async function fetchMidia(link) {
+  if (link) {
+    const response = await fetch(`https://${link}.ipfs.w3s.link/`);
+    const blob = await response.blob();
+    return URL.createObjectURL(blob);
+  }
+  return null;
+}

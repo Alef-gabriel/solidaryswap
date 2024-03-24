@@ -59,8 +59,17 @@
       const jsonString = JSON.stringify(data);
       const blob = new Blob([jsonString], { type: "application/json" });
       const cid = await w3uploadFile(blob);
-      const res = await fetchData({ data: cid }, `http://localhost:5173/api/project/story/${id}`);
+      const res = await fetchData(
+        { data: cid },
+        `http://localhost:5173/api/project/story/${id}`
+      );
       navigation.goto(`/projects/${res.id}`);
+    }
+  };
+
+  const handlePreview = async () => {
+    if (id) {
+      navigation.goto(`/projects/${id}`);
     }
   };
 
@@ -82,7 +91,10 @@
   });
 </script>
 
-<MainProjectNavBar saveFunction={handleSubmit} />
+<MainProjectNavBar
+  previewFunction={handlePreview}
+  saveFunction={handleSubmit}
+/>
 <EditProjectNavBar />
 <LoadingAnimation bind:isLoading={loading} />
 {#if !loading}
