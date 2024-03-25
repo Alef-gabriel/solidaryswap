@@ -39,7 +39,7 @@
     </div>
   </div>
 </div>
-<hr />
+<!-- <hr />
 <div class="flex gap-16 w-full h-86 items-center justify-center p-8">
   <div class="w-2/6 p-8">
     <h2 class="text-xl pb-4">Vanity URL</h2>
@@ -83,7 +83,7 @@
       Add your first collaborators
     </button>
   </div>
-</div>
+</div> -->
 
 <style>
   #pic-next {
