@@ -1,7 +1,7 @@
 import { Database } from "@tableland/sdk";
 import { Wallet, ethers } from "ethers";
 import { filecoinTestnet } from "$lib/providers.js";
-import { getEthPrice } from "$lib/ethUltils.js";
+import { getBTCPrice } from "$lib/ethUltils.js";
 import {
   SECRET_FILECOIN_TESTNET_PRIVATE_KEY,
   SECRET_PROJECT_TABLE_NAME,
@@ -59,6 +59,6 @@ export const load = async ({ url }) => {
 
   return {
     projects: await fetchProjects(),
-    ethPrice: await getEthPrice(),
+    btcPrice: await getBTCPrice(),
   };
 };

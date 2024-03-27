@@ -1,5 +1,5 @@
 <script>
-  import EtheriumInput from "./EtheriumInput.svelte";
+  import BtcInput from "./BtcInput.svelte";
   import { buyTokens } from "$lib/walletConnect.js";
   import { fetchData } from "$lib/fetchData.js"
   export let project;
@@ -84,7 +84,7 @@
               symbol: <span class="text-violet-500">AVX</span>
             </h3>
           </div>
-          <EtheriumInput bind:amount />
+          <BtcInput bind:amount />
           <div class="flex gap-8 items-center justify-center pt-8">
             <button
               on:click={() => {

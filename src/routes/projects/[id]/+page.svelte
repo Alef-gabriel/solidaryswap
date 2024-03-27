@@ -8,7 +8,7 @@
   import CommentsSection from "$lib/components/CommentsSection.svelte";
   import ConfirmationModal from "$lib/components/ConfirmationModal.svelte";
   import LoadingAnimation from "$lib/components/LoadingAnimation.svelte";
-  import { getEthPrice, fetchMidia } from "$lib/ethUltils.js";
+  import { getBTCPrice, fetchMidia, formatUSDPrice } from "$lib/ethUltils.js";
   import FaqsComponent from "../../../lib/components/FaqsComponent.svelte";
   export let data;
 
@@ -31,9 +31,9 @@
   }
 
   onMount(async () => {
-    const ethPrice = await getEthPrice();
-    balance = ethPrice * data.balance;
-    goal = (project.goal * ethPrice).toFixed(2);
+    const ethPrice = await getBTCPrice();
+    balance = formatUSDPrice(ethPrice * data.balance);
+    goal = formatUSDPrice(project.goal * ethPrice);
 
     loading = true;
     if (project.video != "null") {
@@ -49,7 +49,7 @@
 <BackerModal
   bind:isActivated={backed}
   {project}
-  userId={data?.authedUser.id}
+  userId={data.authedUser.id}
   bind:isConfirmed={confirmation}
 />
 <ConfirmationModal phrase=" backer this project" show={confirmation} />
@@ -58,7 +58,9 @@
   <div class="bg-gray-50 flex flex-col">
     <div class="flex flex-col justify-center p-8 items-center w-full h-36">
       <h1 class="text-3xl pb-4">{project.title}</h1>
-      <p class="text-gray-400 text-lg w-3/4 text-center">{project.description}</p>
+      <p class="text-gray-400 text-lg w-3/4 text-center">
+        {project.description}
+      </p>
     </div>
     <div class="flex gap-8 w-full h-86 p-8">
       <div class="flex">

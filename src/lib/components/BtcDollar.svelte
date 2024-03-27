@@ -1,21 +1,21 @@
 <script>
   import { onMount } from "svelte";
-  import { getEthPrice } from "$lib/ethUltils.js";
-  export let ethValue;
+  import { getBTCPrice } from "$lib/ethUltils.js";
+  export let value;
   let dolValue;
 
   onMount(async () => {
-    const ethPrice = await getEthPrice();
-    const eth = document.getElementById("etherium-input");
+    const btcPrice = await getBTCPrice();
+    const eth = document.getElementById("btc-input");
     eth.addEventListener("input", async () => {
-      dolValue = ethValue * ethPrice;
+      dolValue = value * btcPrice;
       if (dolValue == 0) dolValue = "";
     });
 
     const dol = document.getElementById("dollar-input");
     dol.addEventListener("input", async () => {
-      ethValue = (dolValue / ethPrice).toFixed(8);
-      if (ethValue == 0) ethValue = "";
+      value = (dolValue / btcPrice).toFixed(8);
+      if (value == 0) value = "";
     });
   });
 </script>
@@ -138,11 +138,11 @@
   <div class="flex">
     <div class="relative w-full">
       <input
-        bind:value={ethValue}
+        bind:value={value}
         type="number"
-        id="etherium-input"
+        id="btc-input"
         class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-s-lg border-e-gray-50 border-e-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-e-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-        placeholder="0.323 ETH"
+        placeholder="0.323 BTC"
         required
       />
     </div>
@@ -153,22 +153,16 @@
       class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-e-lg focus:ring-4 focus:outline-none focus:ring-gray-100"
       type="button"
     >
-      <svg class="h-4 w-4 me-2" fill="none" viewBox="0 0 10 17"
+      <svg class="h-4 w-4 me-2" fill="none" viewBox="0 0 16 15"
         ><path
-          fill="#343434"
-          d="M5 .5l-.11.364v10.582l.11.105 4.91-2.902L5 .5z"
-        /><path fill="#8C8C8C" d="M5 .5L.086 8.65 5 11.55V.5z" /><path
-          fill="#3C3C3B"
-          d="M5 12.48l-.061.075v3.77L5 16.5l4.914-6.922L5 12.48z"
-        /><path fill="#8C8C8C" d="M5 16.5v-4.02L.086 9.578 5 16.5z" /><path
-          fill="#141414"
-          d="M5 11.55L9.91 8.65 5 6.418v5.133z"
+          fill="#F7931A"
+          d="M14.83 9.204A7.04 7.04 0 111.17 5.797a7.04 7.04 0 0113.66 3.407z"
         /><path
-          fill="#393939"
-          d="M.086 8.649L5 11.551V6.418L.086 8.649z"
+          fill="#fff"
+          d="M11.104 6.498c.14-.937-.573-1.44-1.548-1.777l.316-1.269-.773-.192-.308 1.235c-.203-.05-.411-.098-.619-.145l.31-1.244-.771-.193-.317 1.269a25.752 25.752 0 01-.493-.116v-.004l-1.065-.266-.205.825s.573.132.56.14c.314.078.37.285.36.449l-.36 1.446c.022.005.05.013.08.025l-.08-.02-.506 2.026c-.038.095-.135.237-.354.183.008.011-.562-.14-.562-.14l-.383.884 1.005.251c.187.047.37.096.55.142l-.319 1.284.772.192.317-1.27c.21.058.415.11.615.16l-.315 1.264.772.193.32-1.281c1.317.249 2.308.148 2.724-1.043.336-.96-.016-1.513-.71-1.874.505-.116.886-.448.987-1.134zM9.34 8.973c-.239.96-1.854.44-2.378.31l.424-1.7c.524.13 2.203.39 1.954 1.39zm.239-2.49c-.218.874-1.562.43-1.999.321l.385-1.542c.436.109 1.84.312 1.614 1.222z"
         /></svg
       >
-      ETH
+      BTC
     </button>
   </div>
 </div>

@@ -3,7 +3,7 @@
   import MainNavBar from "$lib/components/MainNavBar.svelte";
   import { goto } from "$app/navigation";
   import { contractBalance } from "$lib/contractBalance.js";
-  import { fetchMidia } from "$lib/ethUltils.js";
+  import { fetchMidia, formatUSDPrice } from "$lib/ethUltils.js";
   export let data;
   let filters = [];
   let page = 0;
@@ -42,14 +42,14 @@
     }
   }
 
-  async function balanceInEth(contractId) {
-    const ethBalance = await contractBalance(contractId);
-    return data.ethPrice * ethBalance;
+  async function balanceInBtc(contractId) {
+    const btcBalance = await contractBalance(contractId);
+    return data.btcPrice * btcBalance;
   }
 
   function balanceToPercent(value, goal) {
-    const totalGoal = data.ethPrice * goal;
-    return (value / totalGoal) * 100;
+    const totalGoal = data.btcPrice * goal;
+    return ((value / totalGoal) * 100).toFixed(2);
   }
 </script>
 
@@ -119,9 +119,9 @@
                 <div
                   class="flex flex-col w-1/4 border-l-2 gap-1 p-2 h-full border-violet-400"
                 >
-                  {#await balanceInEth(project.project_contract_id) then balance}
+                  {#await balanceInBtc(project.project_contract_id) then balance}
                     <h2 class="text-xl text-violet-600 font-semibold">
-                      US$ {balance} pledged
+                      US$ {formatUSDPrice(balance)} pledged
                     </h2>
                     <p class="text-gray-400 text-sm">
                       {balanceToPercent(balance, project.goal)}% funded

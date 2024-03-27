@@ -1,6 +1,6 @@
 <script>
   import MainNavBar from "$lib/components/MainNavBar.svelte";
-  import EtheriumInput from "$lib/components/EtheriumInput.svelte";
+  import BtcInput from "$lib/components/BtcInput.svelte";
   import ConfirmationModal from "$lib/components/ConfirmationModal.svelte";
   import { deposit } from "$lib/walletConnect.js";
   import { fetchData } from "$lib/fetchData.js";
@@ -116,7 +116,7 @@
           placeholder="wallet address..."
           class="w-full p-3 bg-white border focus:outline-none resize-none"
         />
-        <EtheriumInput bind:amount />
+        <BtcInput bind:amount />
       </div>
       <button
         on:click={withdrawSubmit}
@@ -143,7 +143,7 @@
     </div>
     <div class="flex flex-col gap-4 w-3/4 items-center">
       <div class="mb-6 w-3/4 flex flex-col">
-        <EtheriumInput bind:amount />
+        <BtcInput bind:amount />
       </div>
       <button
         on:click={depositSubmit}
@@ -169,7 +169,7 @@
     </div>
     <div class="flex flex-col gap-4 w-3/4 items-center">
       <div class="mb-6 w-3/4 flex flex-col">
-        <EtheriumInput bind:amount />
+        <BtcInput bind:amount />
       </div>
       <button
         on:click={profitSubmit}

@@ -9,7 +9,7 @@
   import { projectTableID } from "$lib/localStorage.js";
   import LoadingAnimation from "$lib/components/LoadingAnimation.svelte";
   import { fetchData } from "$lib/fetchData.js";
-  import EtheriumDollar from "$lib/components/EtheriumDollar.svelte";
+  import BtcDollar from "$lib/components/BtcDollar.svelte";
 
   let principalSelectedCategory = writable();
   let principalSelectedSubCategory = "";
@@ -293,7 +293,7 @@
       </p>
     </div>
     <div class="flex flex-col gap-8 w-3/4">
-		<EtheriumDollar bind:ethValue={form.goal} />
+		<BtcDollar bind:value={form.goal} />
 	</div>
   </div>
 {/if}
