@@ -1,9 +1,8 @@
-import { PUBLIC_PROVIDER_URL } from "$env/static/public";
-import { getDefaultProvider } from "ethers";
+import { botanixTestnet } from "./providers";
 import { ethers } from "ethers";
 
 export const contractBalance = async (contractId) => {
-  const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
+  const provider = new ethers.providers.JsonRpcProvider(botanixTestnet);
   const addressValue = ethers.utils.getAddress(contractId);
   const balance = await provider.getBalance(addressValue);
 

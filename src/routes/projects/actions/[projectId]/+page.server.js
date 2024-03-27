@@ -1,9 +1,9 @@
 import { Database } from "@tableland/sdk";
-import { Wallet, getDefaultProvider } from "ethers";
+import { Wallet, ethers } from "ethers";
 import { redirect } from "@sveltejs/kit";
-import { PUBLIC_PROVIDER_URL } from "$env/static/public";
+import { filecoinTestnet } from "$lib/providers.js";
 import {
-  SECRET_WALLET_PRIVATY_KEY,
+  SECRET_FILECOIN_TESTNET_PRIVATE_KEY,
   SECRET_PROJECT_TABLE_NAME,
 } from "$env/static/private";
 
@@ -17,8 +17,8 @@ export const load = async ({ params, locals }) => {
   };
 
   const fetchProjects = async () => {
-    const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
-    const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
+    const provider = new ethers.providers.JsonRpcProvider(filecoinTestnet);
+    const wallet = new Wallet(SECRET_FILECOIN_TESTNET_PRIVATE_KEY, provider);
 
     const signer = wallet.connect(provider);
     const db = new Database({ signer });

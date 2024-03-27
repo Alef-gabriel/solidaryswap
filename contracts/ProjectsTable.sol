@@ -5,7 +5,6 @@ import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {ERC721Holder} from "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import {TablelandDeployments} from "@tableland/evm/contracts/utils/TablelandDeployments.sol";
 import {SQLHelpers} from "@tableland/evm/contracts/utils/SQLHelpers.sol";
-import {Project} from "./Project.sol";
 
 contract ProjectsTable is ERC721Holder {
     uint256 private _project_tableId;
@@ -14,11 +13,6 @@ contract ProjectsTable is ERC721Holder {
     constructor() {
         _createTable();
     }
-
-	function _createProjectContract() private returns (string memory) {
-		Project project = new Project(address(msg.sender));
-		return Strings.toHexString(uint256(uint160(address(project))), 20);
-	}
 
     function _createTable() private {
         _project_tableId = TablelandDeployments.get().create(
@@ -44,23 +38,14 @@ contract ProjectsTable is ERC721Holder {
     }
 
     function insertIntoTable(string memory query, string memory values) external {
-		string memory newQuery = string.concat(
-            query,
-            ",project_contract_id"
-        );
-		string memory newValues = string.concat(
-            values,
-            ",",
-			SQLHelpers.quote(_createProjectContract())
-        );
         TablelandDeployments.get().mutate(
             address(this), // Table owner, i.e., this contract
             _project_tableId,
             SQLHelpers.toInsert(
                 _TABLE_PREFIX,
                 _project_tableId,
-                newQuery,
-                newValues
+                query,
+                values
             )
         );
     }

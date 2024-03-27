@@ -1,12 +1,12 @@
 import bcrypt from "bcrypt";
-import { Wallet, getDefaultProvider, ethers } from "ethers";
+import { Wallet, ethers } from "ethers";
 import { json } from "@sveltejs/kit";
-import { PUBLIC_PROVIDER_URL } from "$env/static/public";
+import { filecoinTestnet } from "$lib/providers.js";
 import jwt from "jsonwebtoken";
 import fs from "fs";
 import { redirect } from "@sveltejs/kit";
 import {
-  SECRET_WALLET_PRIVATY_KEY,
+  SECRET_FILECOIN_TESTNET_PRIVATE_KEY,
   SECRET_USER_TABLE_CONTRACT,
   SECRET_INGREDIENT,
 } from "$env/static/private";
@@ -19,8 +19,8 @@ export const actions = {
     const password = data.get("password");
 	const name = data.get("name");
 
-    const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
-    const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
+    const provider = new ethers.providers.JsonRpcProvider(filecoinTestnet);
+    const wallet = new Wallet(SECRET_FILECOIN_TESTNET_PRIVATE_KEY, provider);
 
     const compiled = JSON.parse(
       fs.readFileSync("artifacts/contracts/UsersTable.sol/UsersTable.json")

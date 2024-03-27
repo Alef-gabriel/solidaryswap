@@ -21,6 +21,9 @@ export async function buyTokens(encodedAddress, amount) {
       value: valueToSend,
       gasLimit: 300000,
     });
+
+	await transaction.wait();
+
     return transaction.hash;
   } catch (error) {
     console.error("Error connecting wallet:", error);

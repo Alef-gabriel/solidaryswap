@@ -1,8 +1,8 @@
-import { Wallet, getDefaultProvider, ethers } from "ethers";
+import { Wallet, ethers } from "ethers";
 import { json } from "@sveltejs/kit";
-import { PUBLIC_PROVIDER_URL } from "$env/static/public";
+import { botanixTestnet } from "$lib/providers.js";
 import fs from "fs";
-import { SECRET_WALLET_PRIVATY_KEY } from "$env/static/private";
+import { SECRET_BOTANIX_TESTNET_PRIVATE_KEY } from "$env/static/private";
 import { validateToken } from "$lib/validateToken.js";
 
 export async function POST({ request, cookies }) {
@@ -19,8 +19,8 @@ export async function POST({ request, cookies }) {
 
   try {
     const addressValue = ethers.utils.getAddress(contractAddress);
-    const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
-    const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
+    const provider = new ethers.providers.JsonRpcProvider(botanixTestnet);
+    const wallet = new Wallet(SECRET_BOTANIX_TESTNET_PRIVATE_KEY, provider);
 
     const compiled = JSON.parse(
       fs.readFileSync("artifacts/contracts/Project.sol/Project.json")

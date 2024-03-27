@@ -42,7 +42,7 @@
     <div class="flex flex-col w-full gap-4 p-4 items-center">
       {#each comments as comment}
         <div class="flex items-start justify-center p-2 border-2 w-2/4">
-          <div class="flex flex-col gap-6 w-full border-2">
+          <div class="flex flex-col gap-4 w-full border-2 bg-gray-100">
             <div class="flex gap-2">
               <div id="pic-bunner"></div>
               <p class="font-semibold text-lg">User name</p>

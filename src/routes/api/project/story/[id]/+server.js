@@ -1,17 +1,17 @@
-import { Wallet, getDefaultProvider, ethers } from "ethers";
+import { Wallet, ethers } from "ethers";
 import { json } from "@sveltejs/kit";
-import { PUBLIC_PROVIDER_URL } from "$env/static/public";
+import { filecoinTestnet } from "$lib/providers";
 import fs from "fs";
 import {
-  SECRET_WALLET_PRIVATY_KEY,
+  SECRET_FILECOIN_TESTNET_PRIVATE_KEY,
   SECRET_PROJECT_TABLE_CONTRACT,
 } from "$env/static/private";
 
 export async function POST({ request, params }) {
   const { data } = await request.json();
 
-  const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
-  const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
+  const provider = new ethers.providers.JsonRpcProvider(filecoinTestnet);
+  const wallet = new Wallet(SECRET_FILECOIN_TESTNET_PRIVATE_KEY, provider);
 
   const compiled = JSON.parse(
     fs.readFileSync("artifacts/contracts/ProjectsTable.sol/ProjectsTable.json")

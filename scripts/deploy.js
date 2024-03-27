@@ -5,13 +5,17 @@
 // will compile your contracts, add the Hardhat Runtime Environment's members to the
 // global scope, and execute the script.
 import hre from "hardhat";
-import { Wallet, getDefaultProvider, ethers } from "ethers";
+import { Wallet, ethers } from "ethers";
+import { filecoinTestnet } from "../src/lib/providers.js";
 import fs from "fs";
 import "dotenv/config";
 
 async function main() {
-  const provider = getDefaultProvider(process.env.PUBLIC_PROVIDER_URL);
-  const wallet = new Wallet(process.env.SECRET_WALLET_PRIVATY_KEY, provider);
+  const provider = new ethers.providers.JsonRpcProvider(filecoinTestnet);
+  const wallet = new Wallet(
+    process.env.SECRET_FILECOIN_TESTNET_PRIVATE_KEY,
+    provider
+  );
 
   const contractFactory = await hre.ethers.getContractFactory(
     "SolidarySwap",

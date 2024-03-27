@@ -1,11 +1,11 @@
 import { Database } from "@tableland/sdk";
-import { Wallet, getDefaultProvider } from "ethers";
-import { PUBLIC_PROVIDER_URL } from "$env/static/public";
-import { SECRET_WALLET_PRIVATY_KEY } from "$env/static/private";
+import { Wallet, ethers } from "ethers";
+import { filecoinTestnet } from "$lib/providers.js";
+import { SECRET_FILECOIN_TESTNET_PRIVATE_KEY } from "$env/static/private";
 
 export async function commentsTable() {
-  const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY);
-  const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
+  const wallet = new Wallet(SECRET_FILECOIN_TESTNET_PRIVATE_KEY);
+  const provider = new ethers.providers.JsonRpcProvider(filecoinTestnet);
   const signer = wallet.connect(provider);
 
   // Create a database connection

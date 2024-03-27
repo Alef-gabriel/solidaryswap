@@ -1,8 +1,8 @@
-import { Wallet, getDefaultProvider, ethers } from "ethers";
+import { Wallet, ethers } from "ethers";
 import { Database } from "@tableland/sdk";
 import { json } from "@sveltejs/kit";
-import { PUBLIC_PROVIDER_URL } from "$env/static/public";
-import { SECRET_WALLET_PRIVATY_KEY } from "$env/static/private";
+import { filecoinTestnet } from "$lib/providers.js";
+import { SECRET_FILECOIN_TESTNET_PRIVATE_KEY } from "$env/static/private";
 
 async function getCommentsId(db, comments_table_name) {
   const { results } = await db
@@ -14,8 +14,8 @@ async function getCommentsId(db, comments_table_name) {
 export async function POST({ request }) {
   const { tableName, userId, comment } = await request.json();
 
-  const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
-  const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
+  const provider = new ethers.providers.JsonRpcProvider(filecoinTestnet);
+  const wallet = new Wallet(SECRET_FILECOIN_TESTNET_PRIVATE_KEY, provider);
   const signer = wallet.connect(provider);
   const db = new Database({ signer });
 

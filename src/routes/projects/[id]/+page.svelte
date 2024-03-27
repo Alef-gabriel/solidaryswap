@@ -58,7 +58,7 @@
   <div class="bg-gray-50 flex flex-col">
     <div class="flex flex-col justify-center p-8 items-center w-full h-36">
       <h1 class="text-3xl pb-4">{project.title}</h1>
-      <p class="text-gray-400 text-lg">{project.description}</p>
+      <p class="text-gray-400 text-lg w-3/4 text-center">{project.description}</p>
     </div>
     <div class="flex gap-8 w-full h-86 p-8">
       <div class="flex">
@@ -118,7 +118,7 @@
       id="comments"
       comments={data.comments}
       userId={data.authedUser.id}
-      tableName={data.project[0].comments_table_name}
+      tableName={project.comments_table_name}
     />
   {:else if page == "campaign"}
     <div id="campaign" class="flex w-full">

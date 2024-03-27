@@ -1,18 +1,18 @@
 import { Database } from "@tableland/sdk";
-import { Wallet, getDefaultProvider } from "ethers";
-import { PUBLIC_PROVIDER_URL } from "$env/static/public";
+import { Wallet, ethers } from "ethers";
+import { filecoinTestnet, botanixTestnet } from "$lib/providers.js";
 import { contractBalance } from "$lib/contractBalance.js";
-import { ethers } from "ethers";
 import fs from "fs";
 import {
-  SECRET_WALLET_PRIVATY_KEY,
+  SECRET_FILECOIN_TESTNET_PRIVATE_KEY,
+  SECRET_BOTANIX_TESTNET_PRIVATE_KEY,
   SECRET_PROJECT_TABLE_NAME,
   SECRET_USER_TABLE_NAME,
 } from "$env/static/private";
 
 const fetchProjects = async (params) => {
-  const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
-  const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
+  const provider = new ethers.providers.JsonRpcProvider(filecoinTestnet);
+  const wallet = new Wallet(SECRET_FILECOIN_TESTNET_PRIVATE_KEY, provider);
 
   const signer = wallet.connect(provider);
   const db = new Database({ signer });
@@ -28,29 +28,24 @@ const fetchProjects = async (params) => {
 export const load = async ({ params, locals }) => {
   const project = await fetchProjects(params);
 
-  const fetchUsers = async () => {
-    let authedUser = locals.authedUser;
-    if (!authedUser) {
-      return undefined;
-    }
-
-    const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
-    const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
+  const fetchUser = async (id) => {
+    const provider = new ethers.providers.JsonRpcProvider(filecoinTestnet);
+    const wallet = new Wallet(SECRET_FILECOIN_TESTNET_PRIVATE_KEY, provider);
 
     const signer = wallet.connect(provider);
     const db = new Database({ signer });
 
     const { results } = await db
       .prepare(
-        `SELECT * FROM ${SECRET_USER_TABLE_NAME} WHERE id='${authedUser.id}'`
+        `SELECT * FROM ${SECRET_USER_TABLE_NAME} WHERE id='${id}'`
       )
       .all();
     return results;
   };
 
   const fetchComments = async (tableName) => {
-    const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
-    const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
+    const provider = new ethers.providers.JsonRpcProvider(filecoinTestnet);
+    const wallet = new Wallet(SECRET_FILECOIN_TESTNET_PRIVATE_KEY, provider);
 
     const signer = wallet.connect(provider);
     const db = new Database({ signer });
@@ -69,9 +64,9 @@ export const load = async ({ params, locals }) => {
   };
 
   const backersLenght = async (contractId) => {
-    const provider = getDefaultProvider(PUBLIC_PROVIDER_URL);
+    const provider = new ethers.providers.JsonRpcProvider(botanixTestnet);
     const addressValue = ethers.utils.getAddress(contractId);
-    const wallet = new Wallet(SECRET_WALLET_PRIVATY_KEY, provider);
+    const wallet = new Wallet(SECRET_BOTANIX_TESTNET_PRIVATE_KEY, provider);
 
     const compiled = JSON.parse(
       fs.readFileSync("artifacts/contracts/Project.sol/Project.json")
@@ -87,7 +82,7 @@ export const load = async ({ params, locals }) => {
 
   return {
     project: project,
-    owner: await fetchUsers(),
+    owner: await fetchUser(project[0].user_contract_id),
     comments: await fetchComments(project[0].comments_table_name),
     authedUser: getLocals(),
     balance: await contractBalance(project[0].project_contract_id),
