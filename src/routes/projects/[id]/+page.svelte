@@ -118,7 +118,7 @@
   {#if page == "comments"}
     <CommentsSection
       id="comments"
-      comments={data.comments}
+      initialComments={data.comments}
       userId={data.authedUser.id}
       tableName={project.comments_table_name}
     />

@@ -1,11 +1,32 @@
 <script>
   import { fetchData } from "$lib/fetchData.js";
-  export let comments;
+  import { fetchMidia } from "$lib/ethUltils.js";
+  import { writable } from "svelte/store";
+  import { onMount } from "svelte";
+  export let initialComments;
   export let userId;
   export let tableName;
+  let comments = writable([]);
 
   let addComment = false;
   let val = "";
+
+  async function getUserInfo(comment) {
+    const data = await fetchData(
+      { userId: comment.user_id },
+      "http://localhost:5173/api/user"
+    );
+    const userImageURL =
+      data.user.image != "null" ? await fetchMidia(data.user.image) : null;
+    return { ...comment, userName: data.user.name, userImageURL };
+  }
+
+  onMount(async () => {
+    for (let index = 0; index < initialComments.length; index++) {
+      let data = await getUserInfo(initialComments[index]);
+      comments.update((prevComments) => [...prevComments, data]);
+    }
+  });
 </script>
 
 <div class="flex w-full">
@@ -40,12 +61,21 @@
       }}>Add comment</button
     >
     <div class="flex flex-col w-full gap-4 p-4 items-center">
-      {#each comments as comment}
-        <div class="flex items-start justify-center p-2 border-2 w-2/4">
-          <div class="flex flex-col gap-4 w-full border-2 bg-gray-100">
-            <div class="flex gap-2">
-              <div id="pic-bunner"></div>
-              <p class="font-semibold text-lg">User name</p>
+      {#each $comments as comment}
+        <div class="flex items-start justify-center p-2 border-2 w-3/4">
+          <div class="flex flex-col gap-4 w-full border-2 bg-gray-50">
+            <div class="flex items-center gap-2">
+              {#if comment.userImageURL}
+                <img
+                  id="pic-user-image"
+                  src={comment.userImageURL}
+                  alt=""
+                  width="46"
+                  height="46"
+                />
+              {/if}
+              <div id="pic-user"></div>
+              <p class="font-semibold text-lg">{comment.userName}</p>
             </div>
             <div class="p-3">
               {comment.val}
@@ -65,3 +95,13 @@
     </div>
   </div>
 </div>
+
+<style>
+  #pic-user {
+    background-image: url("$lib/images/user.png");
+    background-position: center;
+    background-size: cover;
+    width: 46px;
+    height: 46px;
+  }
+</style>
