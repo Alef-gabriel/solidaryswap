@@ -49,7 +49,7 @@
   };
 </script>
 
-<MainNavBar isOnEditPage={false} />
+<MainNavBar isOnEditPage={false} userImage={data.authedUser.image} />
 <ConfirmationModal phrase=" backer this project" show={confirmation} />
 <div class="w-full border-b items-center">
   <div class="w-full flex items-center p-8">

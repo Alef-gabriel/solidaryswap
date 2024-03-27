@@ -45,7 +45,7 @@
   });
 </script>
 
-<MainNavBar isOnEditPage={false} />
+<MainNavBar isOnEditPage={false} userImage={data.authedUser.image} />
 <BackerModal
   bind:isActivated={backed}
   {project}

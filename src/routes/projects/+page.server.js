@@ -57,8 +57,18 @@ export const load = async ({ url }) => {
     return results;
   };
 
+  const getLocals = () => {
+    let authedUser = undefined;
+    if (locals.authedUser) {
+      authedUser = locals.authedUser;
+    }
+
+    return authedUser;
+  };
+
   return {
     projects: await fetchProjects(),
     btcPrice: await getBTCPrice(),
+    authedUser: getLocals(),
   };
 };

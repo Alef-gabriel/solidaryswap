@@ -1,6 +1,4 @@
 <script>
-  //   import Gun from "gun";
-
   import MainNavBar from "$lib/components/MainNavBar.svelte";
 </script>
 

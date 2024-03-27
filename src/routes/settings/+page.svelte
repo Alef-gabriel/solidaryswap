@@ -46,7 +46,7 @@
   });
 </script>
 
-<MainNavBar isOnEditPage={false} />
+<MainNavBar isOnEditPage={false} userImage={data.authedUser.image} />
 <LoadingAnimation bind:isLoading={loading} />
 {#if !loading}
   <div class="w-full border-b items-center">

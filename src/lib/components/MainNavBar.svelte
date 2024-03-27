@@ -23,7 +23,12 @@
     <a href="/settings">
       {#await fetchMidia(userImage) then image}
         {#if image}
-          <img id="pic-user-image" src={image} alt="" width="36" height="36" />
+          <img
+            id="pic-user-image"
+            src={image}
+            alt=""
+            class="rounded-full w-10 h-10"
+          />
         {:else}
           <div id="pic-user"></div>
         {/if}

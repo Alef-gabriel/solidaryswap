@@ -53,7 +53,7 @@
   }
 </script>
 
-<MainNavBar isOnEditPage={false} />
+<MainNavBar isOnEditPage={false} userImage={data.authedUser.image} />
 <div class="flex w-full gap-8">
   <div class="flex flex-col p-4 w-1/4 gap-2">
     {#each businessAreas as area}
