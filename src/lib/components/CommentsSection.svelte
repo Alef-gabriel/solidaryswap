@@ -16,8 +16,7 @@
       { userId: comment.user_id },
       "http://localhost:5173/api/user"
     );
-    const userImageURL =
-      data.user.image != "null" ? await fetchMidia(data.user.image) : null;
+    const userImageURL = await fetchMidia(data.user.image);
     return { ...comment, userName: data.user.name, userImageURL };
   }
 
@@ -70,11 +69,11 @@
                   id="pic-user-image"
                   src={comment.userImageURL}
                   alt=""
-                  width="46"
-                  height="46"
+                  class="rounded-full w-10 h-10"
                 />
+              {:else}
+                <div id="pic-user"></div>
               {/if}
-              <div id="pic-user"></div>
               <p class="font-semibold text-lg">{comment.userName}</p>
             </div>
             <div class="p-3">
