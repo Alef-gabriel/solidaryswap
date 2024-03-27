@@ -1,9 +1,8 @@
 import bcrypt from "bcrypt";
 import { json } from "@sveltejs/kit";
 import jwt from "jsonwebtoken";
-import AES from "crypto-js/aes"
 import { redirect } from "@sveltejs/kit";
-import { SECRET_INGREDIENT, SECRET_PASSPHRASE } from "$env/static/private";
+import { SECRET_INGREDIENT } from "$env/static/private";
 import { findUserByEmail } from "$lib/findUserBy.js";
 
 /** @type {import('./$types').Actions} */
@@ -13,10 +12,9 @@ export const actions = {
     const email = data.get("email");
     const password = data.get("password");
 
-    const encryptedEmail = AES.encrypt(email, SECRET_PASSPHRASE);
-    const user = await findUserByEmail(encryptedEmail);
+    const user = await findUserByEmail(email);
 
-    const authAttempt = await bcrypt.compare(password, user.password);
+    const authAttempt = await bcrypt.compare(password, user[0].password);
     if (!authAttempt) {
       return new Response(
         JSON.stringify({ res: "Invalid email or password" }),

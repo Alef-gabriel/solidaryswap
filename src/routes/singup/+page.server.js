@@ -34,12 +34,11 @@ export const actions = {
 
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
-    const encryptedEmail = await bcrypt.hash(email, salt);
-    const id = btoa(encryptedEmail);
+    const id = btoa(email);
 
     await contract.insertIntoTable(
       "id,password, email, name",
-      `'${id}','${hash}','${encryptedEmail}','${name}'`
+      `'${id}','${hash}','${email}','${name}'`
     );
     const authToken = jwt.sign({ authUser: id }, SECRET_INGREDIENT, {
       expiresIn: "24h",
