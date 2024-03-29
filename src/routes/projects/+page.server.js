@@ -24,7 +24,7 @@ function handleFilter(search, filters) {
   return preparedFilters;
 }
 
-export const load = async ({ url }) => {
+export const load = async ({ url, locals }) => {
   const fetchProjects = async () => {
     let originalPageNumber = 1;
     const page = url.searchParams.get("page");
