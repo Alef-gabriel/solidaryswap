@@ -2,16 +2,16 @@
   import MainNavBar from "$lib/components/MainNavBar.svelte";
 </script>
 
-<MainNavBar isOnEditPage={false} />
+<MainNavBar isOnEditPage={false} homePage={true}/>
 <div class="header flex flex-col items-center justify-center">
   <div class="flex flex-col items-center text-white">
     <h2 class="h2">Discover, and collect</h2>
-    <h1 class="h1"><strong>extraordinary</strong> Companies</h1>
-    <p class="lead">Marketplace For Companies Tokens</p>
+    <h1 class="h1"><strong>extraordinary</strong> Projects</h1>
+    <p class="lead">Marketplace For Projects Tokens</p>
   </div>
 </div>
-<div class="border-bottom service-section" id="features">
-  <div class="container px-5 my-5">
+<div class="bg-violet-50" id="features">
+  <div class="pt-4 pb-4">
     <div class="row gx-5 a">
       <div class="col-lg-4 mb-5 mb-lg-0 flex-col section">
         <div class="rounded-3 mb-3 icon bg-primary">
@@ -23,7 +23,7 @@
         <div class="feature bg-gradient text-white rounded-3 mb-3 icon">
           <div class="bi bi-building text-4xl"></div>
         </div>
-        <h2 class="h4 fw-bolder">Add Your Companie</h2>
+        <h2 class="h4 fw-bolder">Add Your project</h2>
       </div>
       <div class="col-lg-4 section">
         <div
@@ -39,7 +39,7 @@
 
 <style>
   .header {
-    background-image: url("$lib/images/eth.jpg");
+    background-image: url("$lib/images/eth.png");
     background-position: center;
     background-size: cover;
     height: 73vh;
