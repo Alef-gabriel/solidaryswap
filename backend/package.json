@@ -33,6 +33,7 @@
   "devDependencies": {
 	"@tableland/evm": "^4.5.1",
 	"@tableland/sdk": "^5.2.0",
+	"@web3-storage/w3up-client": "^12.4.1",
 	"ethers": "^5.7.2",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
