@@ -4,6 +4,6 @@ import { W3upController } from './w3up.controller';
 
 @Module({
   providers: [W3upService],
-  controllers: [W3upController]
+  controllers: [W3upController],
 })
 export class W3upModule {}
