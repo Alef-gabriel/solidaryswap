@@ -11,7 +11,7 @@ export const load = async ({ params, locals }) => {
   const getLocals = () => {
     let authedUser = locals.authedUser;
     if (!authedUser) {
-      throw redirect(302, "/login");
+      return redirect(302, "/login");
     }
     return authedUser;
   };

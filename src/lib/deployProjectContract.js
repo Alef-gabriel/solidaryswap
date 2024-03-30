@@ -19,5 +19,5 @@ export async function deployProjectContract() {
 
   const addressValue = ethers.utils.getAddress(SECRET_WALLET_ADDRESS);
   const contract = await contractFactory.deploy(addressValue);
-  return contract.address;
+  return contract.address
 }

@@ -36,9 +36,7 @@ export const load = async ({ params, locals }) => {
     const db = new Database({ signer });
 
     const { results } = await db
-      .prepare(
-        `SELECT * FROM ${SECRET_USER_TABLE_NAME} WHERE id='${id}'`
-      )
+      .prepare(`SELECT * FROM ${SECRET_USER_TABLE_NAME} WHERE id='${id}'`)
       .all();
     return results;
   };
@@ -64,20 +62,25 @@ export const load = async ({ params, locals }) => {
   };
 
   const backersLenght = async (contractId) => {
-    const provider = new ethers.providers.JsonRpcProvider(botanixTestnet);
-    const addressValue = ethers.utils.getAddress(contractId);
-    const wallet = new Wallet(SECRET_BOTANIX_TESTNET_PRIVATE_KEY, provider);
+    try {
+      const provider = new ethers.providers.JsonRpcProvider(botanixTestnet);
+      const addressValue = ethers.utils.getAddress(contractId);
+      const wallet = new Wallet(SECRET_BOTANIX_TESTNET_PRIVATE_KEY, provider);
 
-    const compiled = JSON.parse(
-      fs.readFileSync("artifacts/contracts/Project.sol/Project.json")
-    );
-    const signer = wallet.connect(provider);
-    const contract = new ethers.Contract(addressValue, compiled.abi, signer);
+      const compiled = JSON.parse(
+        fs.readFileSync("artifacts/contracts/Project.sol/Project.json")
+      );
+      const signer = wallet.connect(provider);
+      const contract = new ethers.Contract(addressValue, compiled.abi, signer);
 
-    const backersCount = await contract.getAddressCount();
+      const backersCount = await contract.getAddressCount();
 
-    const backersCountString = backersCount.toString();
-    return backersCountString;
+      const backersCountString = backersCount.toString();
+      return backersCountString;
+    } catch (error) {
+      console.error("Error invalid address:", error);
+      return 0;
+    }
   };
 
   return {

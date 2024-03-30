@@ -1,3 +1,13 @@
+<script>
+  import { fetchData } from "$lib/fetchData.js";
+
+  let email;
+  let password;
+  async function handleSubmit() {
+    await fetchData({ email, password }, "http://localhost:5173/api/login");
+  }
+</script>
+
 <section class="bg-gray-50 dark:bg-gray-900">
   <div
     class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0"
@@ -11,7 +21,7 @@
         >
           Log in
         </h1>
-        <form class="space-y-4 md:space-y-6" method="POST" action="/login">
+        <form class="space-y-4 md:space-y-6">
           <div>
             <label
               for="email"
@@ -22,6 +32,7 @@
               type="email"
               name="email"
               id="email"
+              bind:value={email}
               class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="name@company.com"
               required={true}
@@ -37,6 +48,7 @@
               type="password"
               name="password"
               id="password"
+              bind:value={password}
               placeholder="••••••••"
               class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               required={true}
@@ -51,6 +63,9 @@
           </div>
           <button
             type="submit"
+            on:click={async () => {
+              await handleSubmit();
+            }}
             class="w-full text-white bg-violet-600 hover:bg-violet-700 font-medium rounded-lg text-lg px-5 py-2.5 text-center"
             >Sign in</button
           >
