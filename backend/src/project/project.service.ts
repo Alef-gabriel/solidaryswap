@@ -5,6 +5,7 @@ import { filecoinTestnet, botanixTestnet } from '../config/providers';
 import { Database } from '@tableland/sdk';
 import * as fs from 'fs';
 import { CommentsService } from './comments/comments.service';
+import { UpdateProjectDto } from './updateProject.dto';
 
 @Injectable()
 export class ProjectService {
@@ -127,5 +128,23 @@ export class ProjectService {
     } catch (error) {
       throw new HttpException('Not Found backers table', HttpStatus.NOT_FOUND);
     }
+  }
+
+  async updateProject(updateProject: UpdateProjectDto) {
+    const compiled = JSON.parse(
+      fs.readFileSync(
+        'artifacts/contracts/ProjectsTable.sol/ProjectsTable.json',
+        'utf-8',
+      ),
+    );
+    const contract = new ethers.Contract(
+      process.env.SECRET_PROJECT_TABLE_CONTRACT,
+      compiled.abi,
+      this.signer,
+    );
+    await contract.updateTable(
+      `'${updateProject.id}'`,
+      `data='${updateProject.data}'`,
+    );
   }
 }
