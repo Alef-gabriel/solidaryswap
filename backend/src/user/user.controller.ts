@@ -22,14 +22,20 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard)
-  @Post('create')
+  @Post('find')
   getUser(@Body() id: string) {
     return this.usersService.findOneById(id);
   }
 
   @UseGuards(AuthGuard)
+  @Post('find-all')
+  findAll() {
+    return this.usersService.findAll();
+  }
+
+  @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Post('create')
+  @Post('update')
   updateUser(@Body() updateUser: updateUserDto) {
     return this.usersService.updateUser(updateUser);
   }
