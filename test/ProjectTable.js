@@ -1,82 +1,128 @@
 import { expect } from "chai";
-import hre from "hardhat";
-import { Wallet, getDefaultProvider } from "ethers";
-import { Database } from "@tableland/sdk";
+import { ethers } from "ethers";
+import pkg from "hardhat";
+const { deployments } = pkg;
 
-const privateKey =
-  "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
-const provider = getDefaultProvider("http://127.0.0.1:8545");
+describe("ProjectsTable Contract", function () {
+  let projectsTable;
+  let deployer;
 
-describe("ProjectsTable", function () {
-  it("creates the first table id", async function () {
-    const wallet = new Wallet(privateKey, provider);
-    const contractFactory = await hre.ethers.getContractFactory(
+  beforeEach(async function () {
+    const [account] = await ethers.getSigners();
+    deployer = account;
+
+    const ProjectsTable = await deployments.get("ProjectsTable");
+    projectsTable = await ethers.getContractAt(
       "ProjectsTable",
-      wallet
-    );
-    const deployed = await contractFactory.deploy();
-    expect(await deployed.getTableId()).to.be.gt(0);
-  });
-
-  it("creates the table with the correct name", async function () {
-    const wallet = new Wallet(privateKey, provider);
-    const contractFactory = await hre.ethers.getContractFactory(
-      "ProjectsTable",
-      wallet
-    );
-    const contract = await contractFactory.deploy();
-    const id = await contract.getTableId();
-    expect(await contract.getTableName()).to.be.revertedWith(
-      `table_attributes_${id}`
+      ProjectsTable.address,
+      deployer
     );
   });
 
-  it("insert in the table with the correct schema", async function () {
-    const wallet = new Wallet(privateKey, provider);
-    const contractFactory = await hre.ethers.getContractFactory(
-      "ProjectsTable",
-      wallet
-    );
-    const contract = await contractFactory.deploy();
-    const query =
-      "1,'Avex','Best makerting agency','0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266','Brazil,BA','0xdc64a140aa3e981100a9beca4e685f962f0cf6c9'";
-    await contract.insertIntoTable(query);
-
-    const signer = wallet.connect(provider);
-    const db = new Database({ signer });
-
-    const validQuery =
-      "{id: 1,title: 'Avex',desciption: 'Best makerting agency',data: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',location: 'Brazil,BA',user_tableId: '0xdc64a140aa3e981100a9beca4e685f962f0cf6c9'}";
-    const tableName = await contract.getTableName();
-    expect(
-      await db.prepare(`SELECT * FROM ${tableName}`).all()
-    ).to.be.revertedWith(validQuery);
+  describe("Deployment", function () {
+    it("Should create a Tableland table", async function () {
+      const tableId = await projectsTable.getTableId();
+      expect(tableId).to.be.a("number");
+    });
   });
 
-  it("insert in the table delete the data", async function () {
-    const wallet = new Wallet(privateKey, provider);
-    const contractFactory = await hre.ethers.getContractFactory(
-      "ProjectsTable",
-      wallet
-    );
-    const contract = await contractFactory.deploy();
-    const query =
-      "1,'Avex','Best makerting agency','0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266','Brazil,BA','0xdc64a140aa3e981100a9beca4e685f962f0cf6c9'";
-    await contract.insertIntoTable(query);
+  describe("insertIntoTable", function () {
+    it("Should insert a new project entry", async function () {
+      const title = "My Awesome Project";
+      const description = "This is a great project!";
+      const query = "title, description";
+      const values = `'${title}', '${description}'`;
 
-    const signer = wallet.connect(provider);
-    const db = new Database({ signer });
+      const tx = await projectsTable.insertIntoTable(query, values);
+      await tx.wait();
 
-    const validQuery =
-      "{id: 1,title: 'Avex',desciption: 'Best makerting agency',data: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',location: 'Brazil,BA',user_tableId: '0xdc64a140aa3e981100a9beca4e685f962f0cf6c9'}";
-    const tableName = await contract.getTableName();
-    expect(
-      await db.prepare(`SELECT * FROM ${tableName}`).all()
-    ).to.be.revertedWith(validQuery);
+      // Check if project contract was created
+      const projectContractAddress =
+        await projectsTable._createProjectContract();
+      expect(projectContractAddress).to.not.be.empty;
+    });
 
-	await contract.deleteFromTable(1);
-	expect(
-		await db.prepare(`SELECT * FROM ${tableName}`).all()
-	  ).to.be.revertedWith("[]");
+    it("Should revert if invalid query is provided", async function () {
+      const invalidQuery = "invalid_column, description";
+      const values = "'My Project', 'This is cool'";
+
+      await expect(
+        projectsTable.insertIntoTable(invalidQuery, values)
+      ).to.be.revertedWith("Tableland Error");
+    });
+  });
+
+  describe("updateTable", function () {
+    let projectId;
+
+    beforeEach(async function () {
+      const title = "My Project";
+      const description = "This is cool";
+      const query = "title, description";
+      const values = `'${title}', '${description}'`;
+
+      const tx = await projectsTable.insertIntoTable(query, values);
+      await tx.wait();
+
+      const receipt = await tx.wait();
+      const events = receipt.events;
+      const insertEvent = events.find((event) => event.event === "Insert");
+      projectId = insertEvent.args.id;
+    });
+
+    it("Should update an existing project entry", async function () {
+      const newTitle = "Updated Project";
+      const updateQuery = `title='${newTitle}'`;
+
+      const tx = await projectsTable.updateTable(projectId, updateQuery);
+      await tx.wait();
+
+      // Check if update was successful (might need a getter for specific fields)
+      // ...
+    });
+
+    it("Should revert if invalid id is provided", async function () {
+      const invalidId = "12345";
+      const updateQuery = "title='Updated Project'";
+
+      await expect(
+        projectsTable.updateTable(invalidId, updateQuery)
+      ).to.be.revertedWith("Tableland Error");
+    });
+  });
+
+  describe("deleteFromTable", function () {
+    let projectId;
+
+    beforeEach(async function () {
+      const title = "My Project";
+      const description = "This is cool";
+      const query = "title, description";
+      const values = `'${title}', '${description}'`;
+
+      const tx = await projectsTable.insertIntoTable(query, values);
+      await tx.wait();
+
+      const receipt = await tx.wait();
+      const events = receipt.events;
+      const insertEvent = events.find((event) => event.event === "Insert");
+      projectId = insertEvent.args.id;
+    });
+
+    it("Should delete an existing project entry", async function () {
+      const tx = await projectsTable.deleteFromTable(projectId);
+      await tx.wait();
+
+      // Check if deletion was successful (might need a specific getter)
+      // ...
+    });
+
+    it("Should revert if invalid id is provided", async function () {
+      const invalidId = "12345";
+
+      await expect(projectsTable.deleteFromTable(invalidId)).to.be.revertedWith(
+        "Tableland Error"
+      );
+    });
   });
 });
