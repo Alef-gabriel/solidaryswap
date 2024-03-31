@@ -5,5 +5,6 @@ import { ActionsController } from './actions.controller';
 @Module({
   providers: [ActionsService],
   controllers: [ActionsController],
+  exports: [ActionsService],
 })
 export class ActionsModule {}
