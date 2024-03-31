@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class createDelegationDto {
+export class CreateDelegationDto {
   @IsNotEmpty()
   @IsString()
   did: string;

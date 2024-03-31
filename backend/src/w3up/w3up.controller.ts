@@ -1,6 +1,6 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Controller, Body, Post, UseGuards } from '@nestjs/common';
 import { W3upService } from './w3up.service';
-import { createDelegationDto } from './createDelegation.dto';
+import { CreateDelegationDto } from './createDelegation.dto';
 import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('w3up')
@@ -9,7 +9,7 @@ export class W3upController {
 
   @UseGuards(AuthGuard)
   @Post('create')
-  getUser(@Body() createDelegation: createDelegationDto) {
-    return this.w3upService.createDelegation(createDelegation);
+  getUser(@Body() createDelegation: CreateDelegationDto) {
+    return this.w3upService.delegate(createDelegation);
   }
 }
