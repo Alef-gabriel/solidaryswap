@@ -4,7 +4,7 @@ import { Wallet, ethers, Signer } from 'ethers';
 import { Database } from '@tableland/sdk';
 import { filecoinTestnet } from '../config/providers';
 import * as fs from 'fs';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import { updateUserDto } from './updateUser.dto';
 
 @Injectable()
@@ -44,7 +44,7 @@ export class UserService {
   async create(createuserDto: CreateUserDto): Promise<void> {
     const { email, name, password } = createuserDto;
     const fileContent = fs.readFileSync(
-      'solidarityswap/artifacts/contracts/UsersTable.sol/UsersTable.json',
+      '/home/dinossauro/projects/solidaryswap/artifacts/contracts/UsersTable.sol/UsersTable.json',
       'utf-8',
     );
     const compiled = JSON.parse(fileContent);
@@ -78,7 +78,7 @@ export class UserService {
 
     const compiled = JSON.parse(
       fs.readFileSync(
-        'artifacts/contracts/UsersTable.sol/UsersTable.json',
+        '/home/dinossauro/projects/solidaryswap/artifacts/contracts/UsersTable.sol/UsersTable.json',
         'utf-8',
       ),
     );

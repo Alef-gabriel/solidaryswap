@@ -24,7 +24,7 @@ export class ActionsService {
       const addressValue = ethers.utils.getAddress(contractAddress);
       const compiled = JSON.parse(
         fs.readFileSync(
-          'artifacts/contracts/Project.sol/Project.json',
+          '/solidaryswap/artifacts/contracts/Project.sol/Project.json',
           'utf-8',
         ),
       );
@@ -50,7 +50,7 @@ export class ActionsService {
       const addressValue = ethers.utils.getAddress(contractAddress);
       const compiled = JSON.parse(
         fs.readFileSync(
-          'artifacts/contracts/Project.sol/Project.json',
+          '/solidaryswap/artifacts/contracts/Project.sol/Project.json',
           'utf-8',
         ),
       );
