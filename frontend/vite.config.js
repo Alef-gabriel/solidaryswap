@@ -6,7 +6,7 @@ export default defineConfig({
 	server: {
 		fs: {
 		  allow: [
-			'artifacts/contracts/Project.sol/Project.json',
+			'../artifacts/contracts/Project.sol/Project.json',
 		  ],
 		},
 	  },
