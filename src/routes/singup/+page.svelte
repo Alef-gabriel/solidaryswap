@@ -5,6 +5,15 @@
   let email;
   let password;
   let name;
+
+  function setCookie(name, value) {
+    const date = new Date();
+    date.setTime(date.getTime() + 24 * 60 * 60 * 1000);
+    const expires = "expires=" + date.toUTCString();
+    document.cookie =
+      name + "=" + value + ";" + expires + ";path=/;SameSite=strict";
+  }
+
   async function handleSubmit() {
     const data = await fetchData(
       { email, password, name },

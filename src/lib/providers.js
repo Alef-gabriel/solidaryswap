@@ -1,4 +1,3 @@
-export const botanixTestnet = "https://node.botanixlabs.dev";
+export const botanixTestnet = "http://localhost:8545";
 
-export const filecoinTestnet =
-  "https://filecoin-calibration.chainup.net/rpc/v1";
+export const filecoinTestnet = "http://localhost:8545";

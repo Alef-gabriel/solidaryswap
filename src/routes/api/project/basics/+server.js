@@ -3,7 +3,6 @@ import { json } from "@sveltejs/kit";
 import { filecoinTestnet } from "$lib/providers.js";
 import { backersTable } from "$lib/model/BackersTable.js";
 import { commentsTable } from "$lib/model/CommentsTable.js";
-import { deployProjectContract } from "$lib/deployProjectContract";
 import fs from "fs";
 import {
   SECRET_FILECOIN_TESTNET_PRIVATE_KEY,
@@ -37,13 +36,13 @@ export async function POST({ request }) {
     compiled.abi,
     signer
   );
+
   const backers_table_name = await backersTable();
   const comments_table_name = await commentsTable();
-  const deployed_project_contract = await deployProjectContract();
 
   await contract.insertIntoTable(
-    "id,title,description,image,video,location,user_contract_id,backers_table_name,comments_table_name, category, sub_category, goal, project_contract_id",
-    `'${id}','${title}','${description}','${image}','${video}','${location}','${user_contract_id}','${backers_table_name}','${comments_table_name}','${category}','${subCategory}','${goal}','${deployed_project_contract}'`
+    "id,title,description,image,video,location,user_contract_id,backers_table_name,comments_table_name, category, sub_category, goal",
+    `'${id}','${title}','${description}','${image}','${video}','${location}','${user_contract_id}','${backers_table_name}','${comments_table_name}','${category}','${subCategory}','${goal}'`
   );
   return new Response(JSON.stringify({ id: id }), { status: 200 });
 }
