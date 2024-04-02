@@ -11,15 +11,16 @@ import {
   SECRET_INGREDIENT,
 } from "$env/static/private";
 
-export async function POST({ cookies, request }) {
+export async function POST({ request }) {
   const { email, password, name } = await request.json();
-
+  console.log("entrou fi");
   const provider = new ethers.providers.JsonRpcProvider(filecoinTestnet);
   const wallet = new Wallet(SECRET_FILECOIN_TESTNET_PRIVATE_KEY, provider);
 
   const compiled = JSON.parse(
     fs.readFileSync("artifacts/contracts/UsersTable.sol/UsersTable.json")
   );
+  console.log(compiled);
   const signer = wallet.connect(provider);
   const contract = new ethers.Contract(
     SECRET_USER_TABLE_CONTRACT,
@@ -38,11 +39,5 @@ export async function POST({ cookies, request }) {
   const authToken = jwt.sign({ authUser: id }, SECRET_INGREDIENT, {
     expiresIn: "24h",
   });
-  cookies.set("authToken", authToken, {
-    path: "/",
-    httpOnly: true,
-    maxAge: 60 * 60 * 24,
-    sameSite: "strict",
-  });
-  return redirect(201, "/");
+  return new Response(JSON.stringify({ authToken }), { status: 201 });
 }

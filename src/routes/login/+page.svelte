@@ -1,10 +1,25 @@
 <script>
   import { fetchData } from "$lib/fetchData.js";
+  import { goto } from "$app/navigation";
 
   let email;
   let password;
+
+  function setCookie(name, value) {
+    const date = new Date();
+    date.setTime(date.getTime() + 24 * 60 * 60 * 1000);
+    const expires = "expires=" + date.toUTCString();
+    document.cookie =
+      name + "=" + value + ";" + expires + ";path=/;SameSite=strict";
+  }
+
   async function handleSubmit() {
-    await fetchData({ email, password }, "http://localhost:5173/api/login");
+    const data = await fetchData(
+      { email, password },
+      "http://localhost:5173/api/login"
+    );
+    setCookie("authToken", data.authToken);
+    goto("/projects");
   }
 </script>
 

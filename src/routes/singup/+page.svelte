@@ -1,14 +1,17 @@
 <script>
   import { fetchData } from "$lib/fetchData.js";
+  import { goto } from "$app/navigation";
 
   let email;
   let password;
   let name;
   async function handleSubmit() {
-    await fetchData(
+    const data = await fetchData(
       { email, password, name },
       "http://localhost:5173/api/singup"
     );
+	setCookie("authToken", data.authToken);
+    goto("/projects");
   }
 </script>
 
