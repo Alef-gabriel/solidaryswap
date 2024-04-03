@@ -1,19 +1,14 @@
-import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
-import { join } from 'path';
+import { sveltekit } from "@sveltejs/kit/vite";
+import { defineConfig } from "vite";
 
 export default defineConfig({
-	server: {
-		fs: {
-		  allow: [
-			'artifacts/contracts/Project.sol/Project.json',
-		  ],
-		},
-	  },
-	resolve: {
-		alias: {
-		  '@': join(__dirname, ''), // Alias for entire src directory
-		},
-	  },
-	plugins: [sveltekit()]
+  plugins: [sveltekit()],
+  server: {
+    cors: {
+      origin: "*",
+      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+      credentials: true,
+      optionsSuccessStatus: 200,
+    },
+  },
 });
