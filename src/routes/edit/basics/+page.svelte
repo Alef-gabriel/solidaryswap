@@ -48,7 +48,7 @@
         category: principalSelectedSubCategory,
         subCategory: selectedSubCategory,
       },
-      "http://localhost:5173/api/project/basics"
+      "http://localhost:3000/api/project/basics"
     );
     projectTableID.set(res.id);
     navigation.goto(`/story?id=${res.id}`);

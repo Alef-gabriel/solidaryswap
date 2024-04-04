@@ -28,7 +28,7 @@
         contractAddress: data.project[0].project_contract_id,
         project_user_id: data.project[0].user_contract_id,
       },
-      `http://localhost:5173/api/project/${endPoint}`
+      `http://localhost:3000/api/project/${endPoint}`
     );
     confirmation = true;
     phrase = "withdraw aproved";
@@ -42,7 +42,7 @@
         contractAddress: data.project[0].project_contract_id,
         project_user_id: data.project[0].user_contract_id,
       },
-      `http://localhost:5173/api/project/${endPoint}`
+      `http://localhost:3000/api/project/${endPoint}`
     );
     confirmation = true;
     phrase = "profit-sharing complete";

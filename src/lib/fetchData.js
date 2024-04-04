@@ -2,6 +2,7 @@ export const fetchData = async (data, url) => {
   try {
     const response = await fetch(url, {
       method: "POST",
+	  mode: "cors",
       headers: {
         "Content-Type": "application/json",
       },

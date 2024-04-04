@@ -14,7 +14,7 @@
   async function getUserInfo(comment) {
     const data = await fetchData(
       { userId: comment.user_id },
-      "http://localhost:5173/api/user"
+      "http://localhost:3000/api/user"
     );
     const userImageURL = await fetchMidia(data.user.image);
     return { ...comment, userName: data.user.name, userImageURL };
@@ -53,7 +53,7 @@
         if (addComment) {
           await fetchData(
             { comment: val, tableName, userId },
-            "http://localhost:5173/api/project/comments"
+            "http://localhost:3000/api/project/comments"
           );
         }
         addComment = !addComment;

@@ -17,7 +17,7 @@
   async function handleSubmit() {
     form.transaction = await buyTokens(project.project_contract_id, amount);
     if(form.transaction){
-		await fetchData(form, "http://localhost:5173/api/project/backer");
+		await fetchData(form, "http://localhost:3000/api/project/backer");
 		isActivated = false;
 		isConfirmed = true;
 	}

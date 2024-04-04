@@ -16,7 +16,7 @@
   async function handleSubmit() {
     const data = await fetchData(
       { email, password },
-      "http://localhost:5173/api/login"
+      "http://localhost:3000/api/login"
     );
     setCookie("authToken", data.authToken);
     goto("/projects");

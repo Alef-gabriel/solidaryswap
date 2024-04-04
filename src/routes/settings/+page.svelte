@@ -33,7 +33,7 @@
     }
     const res = await fetchData(
       form,
-      `http://localhost:5173/api/user-update/${data?.authedUser.id}`
+      `http://localhost:3000/api/user-update/${data?.authedUser.id}`
     );
     loading = false;
   };
