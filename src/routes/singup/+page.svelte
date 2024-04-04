@@ -17,7 +17,7 @@
   async function handleSubmit() {
     const data = await fetchData(
       { email, password, name },
-      "http://localhost:3000/api/singup"
+      "https://solidaryswap.onrender.com/api/singup"
     );
 	setCookie("authToken", data.authToken);
     goto("/projects");

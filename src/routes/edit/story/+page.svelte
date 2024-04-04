@@ -61,7 +61,7 @@
       const cid = await w3uploadFile(blob);
       const res = await fetchData(
         { data: cid },
-        `http://localhost:3000/api/project/story/${id}`
+        `https://solidaryswap.onrender.com/api/project/story/${id}`
       );
       navigation.goto(`/projects/${res.id}`);
     }

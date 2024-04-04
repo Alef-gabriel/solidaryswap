@@ -5,7 +5,7 @@ export const w3upDelegation = async () => {
   const client = await Client.create();
 
   const did = await client.did();
-  const apiUrl = `http://localhost:3000/api/w3up-delegation/${did}`;
+  const apiUrl = `https://solidaryswap.onrender.com/api/w3up-delegation/${did}`;
   const response = await fetch(apiUrl);
   const data = await response.arrayBuffer();
 
