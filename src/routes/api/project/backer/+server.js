@@ -27,5 +27,10 @@ export async function POST({ request }) {
     .bind(id, user_id)
     .run();
   await insert.txn?.wait();
-  return new Response(JSON.stringify({ res: "Susses" }), { status: 200 });
+  return new Response(JSON.stringify({ res: "Susses" }), {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
+  });
 }

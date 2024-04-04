@@ -52,5 +52,10 @@ export async function GET({ url }) {
         `LIMIT 10 OFFSET ${(originalPageNumber - 1) * 10}`
     )
     .all();
-  return new Response(JSON.stringify({ res: results }), { status: 200 });
+  return new Response(JSON.stringify({ res: results }), {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
+  });
 }
