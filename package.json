@@ -33,9 +33,11 @@
 		"@web3-storage/w3up-client": "^12.4.1",
 		"bcrypt": "^5.1.1",
 		"buffer": "^6.0.3",
+		"cors": "^2.8.5",
 		"crypto-js": "^4.2.0",
 		"dotenv": "^16.4.5",
 		"ethers": "^5.7.2",
+		"express": "^4.19.2",
 		"hardhat": "^2.20.1",
 		"jsonwebtoken": "^9.0.2",
 		"openzeppelin-solidity": "^2.2.0"
