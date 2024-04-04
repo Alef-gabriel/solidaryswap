@@ -8,7 +8,7 @@ export async function POST({ request }) {
   const { email, password } = await request.json();
 
   const user = await findUserByEmail(email);
-  console.log(user)
+  console.log(user);
   if (!user || user.length == 0) {
     return new Response(JSON.stringify({ res: "Invalid email or password" }), {
       status: 200,
@@ -25,7 +25,17 @@ export async function POST({ request }) {
     const authToken = jwt.sign({ authUser: userAttempt }, SECRET_INGREDIENT, {
       expiresIn: "24h",
     });
-    return new Response(JSON.stringify({ authToken }), { status: 201 });
+    return new Response(JSON.stringify({ authToken }), {
+      status: 201,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
   }
-  return new Response(JSON.stringify({ res: "error" }), { status: 400 });
+  return new Response(JSON.stringify({ res: "error" }), {
+    status: 400,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
+  });
 }

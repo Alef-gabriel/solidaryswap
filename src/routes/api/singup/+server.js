@@ -37,5 +37,10 @@ export async function POST({ request }) {
   const authToken = jwt.sign({ authUser: id }, SECRET_INGREDIENT, {
     expiresIn: "24h",
   });
-  return new Response(JSON.stringify({ authToken }), { status: 201 });
+  return new Response(JSON.stringify({ authToken }), {
+    status: 201,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
+  });
 }

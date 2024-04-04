@@ -15,6 +15,9 @@ export async function POST({ request, cookies }) {
   if (user == undefined || user.id != project_user_id) {
     return new Response(JSON.stringify({ res: "Unauthorized" }), {
       status: 401,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
     });
   }
 
@@ -33,8 +36,18 @@ export async function POST({ request, cookies }) {
     await contract.withdraw(walletToRecive, uintValue, {
       gasLimit: 210000,
     });
-    return new Response(JSON.stringify({ res: "Susses" }), { status: 200 });
+    return new Response(JSON.stringify({ res: "Susses" }), {
+      status: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
   } catch (error) {
-    return new Response(JSON.stringify({ res: error }), { status: 500 });
+    return new Response(JSON.stringify({ res: error }), {
+      status: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
   }
 }

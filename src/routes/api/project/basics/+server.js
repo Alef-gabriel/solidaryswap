@@ -44,5 +44,10 @@ export async function POST({ request }) {
     "id,title,description,image,video,location,user_contract_id,backers_table_name,comments_table_name, category, sub_category, goal",
     `'${id}','${title}','${description}','${image}','${video}','${location}','${user_contract_id}','${backers_table_name}','${comments_table_name}','${category}','${subCategory}','${goal}'`
   );
-  return new Response(JSON.stringify({ id: id }), { status: 200 });
+  return new Response(JSON.stringify({ id: id }), {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
+  });
 }

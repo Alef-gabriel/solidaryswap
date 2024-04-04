@@ -24,8 +24,13 @@ export async function GET({ params }) {
   });
 
   // Serialize the delegation and send it to the client
-  const archive = await delegation.archive()
-  return new Response(archive.ok, { status: 200 });
+  const archive = await delegation.archive();
+  return new Response(archive.ok, {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
+  });
 }
 
 /** @param {string} data Base64 encoded CAR file */
