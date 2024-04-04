@@ -40,17 +40,11 @@ export async function POST({ request, cookies }) {
       });
     }
     return new Response(JSON.stringify({ res: "Susses" }), {
-      status: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
+      status: 201,
     });
   } catch (error) {
     return new Response(JSON.stringify({ res: error }), {
       status: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
     });
   }
 }

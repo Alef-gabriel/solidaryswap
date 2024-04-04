@@ -24,9 +24,6 @@ export async function POST({ request, params }) {
   );
   await contract.updateTable(`'${params.id}'`, `data='${data}'`);
   return new Response(JSON.stringify({ id: params.id }), {
-    status: 200,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
+    status: 201,
   });
 }

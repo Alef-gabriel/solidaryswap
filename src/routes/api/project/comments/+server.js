@@ -28,9 +28,6 @@ export async function POST({ request }) {
     .run();
   await insert.txn?.wait();
   return new Response(JSON.stringify({ res: "Susses" }), {
-    status: 200,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
+    status: 201,
   });
 }

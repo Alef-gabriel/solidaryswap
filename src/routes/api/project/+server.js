@@ -53,9 +53,6 @@ export async function GET({ url }) {
     )
     .all();
   return new Response(JSON.stringify({ res: results }), {
-    status: 200,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
+    status: 201,
   });
 }

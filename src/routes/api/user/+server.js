@@ -6,8 +6,5 @@ export async function POST({ request }) {
   const user = users[0];
   return new Response(JSON.stringify({ user: user }), {
     status: 200,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
   });
 }

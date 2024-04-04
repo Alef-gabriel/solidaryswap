@@ -27,9 +27,6 @@ export async function POST({ request, params }) {
     `name='${name}',biography='${biography}',image='${image}',location='${location}'`
   );
   return new Response(JSON.stringify({ message: "Created" }), {
-    status: 200,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
+    status: 201,
   });
 }

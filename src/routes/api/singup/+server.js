@@ -39,8 +39,5 @@ export async function POST({ request }) {
   });
   return new Response(JSON.stringify({ authToken }), {
     status: 201,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
   });
 }

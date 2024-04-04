@@ -27,9 +27,6 @@ export async function GET({ params }) {
   const archive = await delegation.archive();
   return new Response(archive.ok, {
     status: 200,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
   });
 }
 
