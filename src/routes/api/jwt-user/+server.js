@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import { SECRET_INGREDIENT } from "$env/static/private";
 
-/** @type {import('@sveltejs/kit').Handle} */
 export async function POST({ request }) {
   const { authToken } = await request.json();
   const claims = jwt.verify(authToken, SECRET_INGREDIENT);
