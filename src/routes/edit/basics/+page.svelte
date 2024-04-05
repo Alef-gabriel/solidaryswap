@@ -51,7 +51,7 @@
       "http://localhost:5173/api/project/basics"
     );
     projectTableID.set(res.id);
-    navigation.goto(`/story?id=${res.id}`);
+    navigation.goto(`/edit/story?id=${res.id}`);
   };
 
   onMount(() => {
