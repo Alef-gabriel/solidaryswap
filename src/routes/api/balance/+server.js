@@ -1,4 +1,4 @@
-import { botanixTestnet } from "./providers";
+import { botanixTestnet } from "$lib/providers.js";
 import { ethers } from "ethers";
 
 export async function POST({ request }) {
