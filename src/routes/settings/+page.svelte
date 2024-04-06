@@ -4,7 +4,10 @@
   import { fetchData } from "$lib/fetchData.js";
   import LoadingAnimation from "$lib/components/LoadingAnimation.svelte";
   import { w3upDelegation } from "$lib/w3upDelegation.js";
-  export let data;
+  import { getCookie } from "$lib/getCookie.js";
+  import { goto } from "$app/navigation";
+  import { writable } from "svelte/store";
+  let authedUser = writable({});
 
   let editProfile = true;
   let changePassword = false;
@@ -33,12 +36,20 @@
     }
     const res = await fetchData(
       form,
-      `https://solidaryswap.onrender.com/api/user-update/${data?.authedUser.id}`
+      `https://solidaryswap.onrender.com/api/user-update/${$authedUser.id}`
     );
     loading = false;
   };
 
-  onMount(() => {
+  onMount(async () => {
+    const req = await fetchData(
+      { authToken: getCookie("authToken") },
+      "https://solidaryswap.onrender.com/api/jwt-user"
+    );
+	authedUser.set(req.user);
+    if (!$authedUser) {
+      goto("/login");
+    }
     const image = document.getElementById("image");
     image.addEventListener("change", async (event) => {
       form.image = event.target.files[0];
@@ -46,7 +57,10 @@
   });
 </script>
 
-<MainNavBar isOnEditPage={false} userImage={data.authedUser.image} />
+<MainNavBar
+  isOnEditPage={false}
+  userImage={$authedUser ? $authedUser.image : null}
+/>
 <LoadingAnimation bind:isLoading={loading} />
 {#if !loading}
   <div class="w-full border-b items-center">
