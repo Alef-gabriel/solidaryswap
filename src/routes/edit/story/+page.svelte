@@ -10,6 +10,7 @@
   import { projectTableID } from "$lib/localStorage.js";
   import LoadingAnimation from "$lib/components/LoadingAnimation.svelte";
   import { fetchData } from "$lib/fetchData.js";
+  import { getCookie } from "$lib/getCookie.js";
 
   let faqs = writable([]);
   const params = $page.url.searchParams.get("id");
@@ -74,6 +75,13 @@
   };
 
   onMount(async () => {
+    const req = await fetchData(
+      { authToken: getCookie("authToken") },
+      "https://solidaryswap.onrender.com/api/jwt-user"
+    );
+    if (!req.user) {
+      goto("/login");
+    }
     if (browser) {
       let editor = document.getElementById("editor");
       const { default: Quill } = await import("quill");
