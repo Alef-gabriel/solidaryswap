@@ -1,6 +1,20 @@
 <script>
   import MainProjectNavBar from "$lib/components/MainProjectNavBar.svelte";
   import EditProjectNavBar from "$lib/components/EditProjectNavBar.svelte";
+  import { fetchData } from "$lib/fetchData.js";
+  import { getCookie } from "$lib/getCookie.js";
+  import { goto } from "$app/navigation";
+  import { onMount } from "svelte";
+
+  onMount(async () => {
+    const req = await fetchData(
+      { authToken: getCookie("authToken") },
+      "https://solidaryswap.onrender.com/api/jwt-user"
+    );
+    if (!req.user) {
+      goto("/login");
+    }
+  });
 </script>
 
 <MainProjectNavBar />
@@ -39,6 +53,7 @@
     </div>
   </div>
 </div>
+
 <!-- <hr />
 <div class="flex gap-16 w-full h-86 items-center justify-center p-8">
   <div class="w-2/6 p-8">
