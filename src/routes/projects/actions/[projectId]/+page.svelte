@@ -4,7 +4,11 @@
   import ConfirmationModal from "$lib/components/ConfirmationModal.svelte";
   import { deposit } from "$lib/walletConnect.js";
   import { fetchData } from "$lib/fetchData.js";
+  import { onMount } from "svelte";
+  import { getCookie } from "$lib/getCookie.js";
+  import { writable } from "svelte/store";
   export let data;
+  let authedUser = writable({});
 
   let page = 1;
   let endPoint = "";
@@ -47,9 +51,20 @@
     confirmation = true;
     phrase = "profit-sharing complete";
   };
+
+  onMount(async () => {
+    const req = await fetchData(
+      { authToken: getCookie("authToken") },
+      "https://solidaryswap.onrender.com/api/jwt-user"
+    );
+	authedUser.set(req.user);
+  });
 </script>
 
-<MainNavBar isOnEditPage={false} userImage={data.authedUser.image} />
+<MainNavBar
+  isOnEditPage={false}
+  userImage={$authedUser ? $authedUser.image : null}
+/>
 <ConfirmationModal phrase=" backer this project" show={confirmation} />
 <div class="w-full border-b items-center">
   <div class="w-full flex items-center p-8">
