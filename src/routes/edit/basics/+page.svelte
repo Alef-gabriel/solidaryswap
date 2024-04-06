@@ -4,7 +4,7 @@
   import MainProjectNavBar from "$lib/components/MainProjectNavBar.svelte";
   import { writable } from "svelte/store";
   import { onMount } from "svelte";
-  import * as navigation from "$app/navigation";
+  import { goto } from "$app/navigation";
   import { w3upDelegation } from "$lib/w3upDelegation.js";
   import { projectTableID } from "$lib/localStorage.js";
   import LoadingAnimation from "$lib/components/LoadingAnimation.svelte";
@@ -52,7 +52,8 @@
       "https://solidaryswap.onrender.com/api/project/basics"
     );
     projectTableID.set(res.id);
-    navigation.goto(`/edit/story?id=${res.id}`);
+	loading = false;
+    goto(`/edit/story?id=${res.id}`);
   };
 
   onMount(async () => {
@@ -62,7 +63,7 @@
     );
     authedUser.set(req.user);
     if (!$authedUser) {
-      navigation.goto("/login");
+      goto("/login");
     }
     const image = document.getElementById("image");
     image.addEventListener("change", async (event) => {
