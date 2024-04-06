@@ -4,6 +4,8 @@
   import { json } from "@sveltejs/kit";
   import { onMount } from "svelte";
   import { writable } from "svelte/store";
+  import { fetchData } from "$lib/fetchData.js";
+  import { getCookie } from "$lib/getCookie.js";
   import BackerModal from "$lib/components/BackerModal.svelte";
   import CommentsSection from "$lib/components/CommentsSection.svelte";
   import ConfirmationModal from "$lib/components/ConfirmationModal.svelte";
@@ -22,15 +24,21 @@
   let confirmation = false;
   let loading = true;
   let page = "campaign";
+  let authedUser = writable({});
   let balance;
   let goal;
 
-  async function fetchData(link) {
+  async function fetchStory(link) {
     const response = await fetch(`https://${link}.ipfs.w3s.link/`);
     return await response.json();
   }
 
   onMount(async () => {
+    const req = await fetchData(
+      { authToken: getCookie("authToken") },
+      "https://solidaryswap.onrender.com/api/jwt-user"
+    );
+    authedUser.set(req.user);
     const ethPrice = await getBTCPrice();
     balance = formatUSDPrice(ethPrice * data.balance);
     goal = formatUSDPrice(project.goal * ethPrice);
@@ -41,15 +49,18 @@
     }
     image = await fetchMidia(project.image);
     loading = false;
-    storyHtml.set(await fetchData(project.data));
+    storyHtml.set(await fetchStory(project.data));
   });
 </script>
 
-<MainNavBar isOnEditPage={false} userImage={data.authedUser.image} />
+<MainNavBar
+  isOnEditPage={false}
+  userImage={$authedUser ? $authedUser.image : null}
+/>
 <BackerModal
   bind:isActivated={backed}
   {project}
-  userId={data.authedUser.id}
+  userId={$authedUser.id}
   bind:isConfirmed={confirmation}
 />
 <ConfirmationModal phrase=" backer this project" show={confirmation} />
@@ -119,7 +130,7 @@
     <CommentsSection
       id="comments"
       initialComments={data.comments}
-      userId={data.authedUser.id}
+      userId={$authedUser.id}
       tableName={project.comments_table_name}
     />
   {:else if page == "campaign"}

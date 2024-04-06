@@ -25,7 +25,7 @@ const fetchProjects = async (params) => {
   return results;
 };
 
-export const load = async ({ params, locals }) => {
+export const load = async ({ params }) => {
   const project = await fetchProjects(params);
 
   const fetchUser = async (id) => {
@@ -50,15 +50,6 @@ export const load = async ({ params, locals }) => {
 
     const { results } = await db.prepare(`SELECT * FROM ${tableName}`).all();
     return results;
-  };
-
-  const getLocals = () => {
-    let authedUser = undefined;
-    if (locals.authedUser) {
-      authedUser = locals.authedUser;
-    }
-
-    return authedUser;
   };
 
   const backersLenght = async (contractId) => {
@@ -87,7 +78,6 @@ export const load = async ({ params, locals }) => {
     project: project,
     owner: await fetchUser(project[0].user_contract_id),
     comments: await fetchComments(project[0].comments_table_name),
-    authedUser: getLocals(),
     balance: await contractBalance(project[0].project_contract_id),
     backers: await backersLenght(project[0].project_contract_id),
   };
