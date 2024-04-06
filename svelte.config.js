@@ -20,7 +20,7 @@ const config = {
         "/edit",
         "/edit/people",
         "/edit/story",
-        "/projects/actions/[projectId]",
+        "/projects/actions",
         "/projects/plan",
       ],
       handleHttpError: ({ path, message }) => {

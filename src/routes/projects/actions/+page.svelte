@@ -7,18 +7,21 @@
   import { onMount } from "svelte";
   import { getCookie } from "$lib/getCookie.js";
   import { writable } from "svelte/store";
-  export let data;
+  import { page } from "$app/stores";
+
+  const params = $page.url.searchParams.get("id");
   let authedUser = writable({});
 
-  let page = 1;
+  let pageLoad = 1;
   let endPoint = "";
   let amount;
   let walletToRecive;
   let confirmation = false;
+  let project = writable();
   let phrase = "";
 
   const depositSubmit = async () => {
-    await deposit(data.project[0].project_contract_id, amount);
+    await deposit($project.project_contract_id, amount);
     confirmation = true;
     phrase = "deposit aproved";
   };
@@ -29,8 +32,8 @@
       {
         amount,
         walletToRecive,
-        contractAddress: data.project[0].project_contract_id,
-        project_user_id: data.project[0].user_contract_id,
+        contractAddress: $project.project_contract_id,
+        project_user_id: $project.user_contract_id,
       },
       `https://solidaryswap.onrender.com/api/project/${endPoint}`
     );
@@ -43,8 +46,8 @@
     await fetchData(
       {
         amount,
-        contractAddress: data.project[0].project_contract_id,
-        project_user_id: data.project[0].user_contract_id,
+        contractAddress: $project.project_contract_id,
+        project_user_id: $project.user_contract_id,
       },
       `https://solidaryswap.onrender.com/api/project/${endPoint}`
     );
@@ -53,6 +56,12 @@
   };
 
   onMount(async () => {
+	const requests = await fetchData(
+      { id: params },
+      "https://solidaryswap.onrender.com/api/id-project"
+    );
+    project.set(requests.res[0]);
+
     const req = await fetchData(
       { authToken: getCookie("authToken") },
       "https://solidaryswap.onrender.com/api/jwt-user"
@@ -77,7 +86,7 @@
       <a
         href="#deposit"
         on:click={() => {
-          page = 1;
+          pageLoad = 1;
         }}
       >
         <p class="text-lg text-gray-600">Deposit</p>
@@ -89,7 +98,7 @@
       <a
         href="#withdraw"
         on:click={() => {
-          page = 2;
+          pageLoad = 2;
         }}
       >
         <p class="text-lg text-gray-600">Withdraw</p>
@@ -101,7 +110,7 @@
       <a
         href="#profit"
         on:click={() => {
-          page = 3;
+          pageLoad = 3;
         }}
       >
         <p class="text-lg text-gray-600">Profit</p>
@@ -109,7 +118,7 @@
     </div>
   </div>
 </div>
-{#if page == 2}
+{#if pageLoad == 2}
   <div
     id="withdraw"
     class="flex gap-16 w-full h-86 items-center justify-center p-8"
@@ -142,7 +151,7 @@
     </div>
   </div>
 {/if}
-{#if page == 1}
+{#if pageLoad == 1}
   <div
     id="deposit"
     class="flex gap-16 w-full h-86 items-center justify-center p-8"
@@ -169,7 +178,7 @@
     </div>
   </div>
 {/if}
-{#if page == 3}
+{#if pageLoad == 3}
   <div
     id="profits"
     class="flex gap-16 w-full h-86 items-center justify-center p-8"
