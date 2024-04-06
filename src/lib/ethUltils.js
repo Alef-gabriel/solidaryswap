@@ -54,7 +54,7 @@ export function formatUSDPrice(number) {
 }
 
 export async function fetchMidia(link) {
-  if (link) {
+  if (link && link != "" && link != "null" && link != "null") {
     const response = await fetch(`https://gateway.pinata.cloud/ipfs/${link}`);
     const blob = await response.blob();
     return URL.createObjectURL(blob);
