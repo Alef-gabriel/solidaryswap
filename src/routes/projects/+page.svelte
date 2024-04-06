@@ -4,6 +4,12 @@
   import { goto } from "$app/navigation";
   import { contractBalance } from "$lib/contractBalance.js";
   import { fetchMidia, formatUSDPrice } from "$lib/ethUltils.js";
+  import { onMount } from "svelte";
+  import { writable } from "svelte/store";
+  import { fetchData } from "$lib/fetchData.js";
+  import { getCookie } from "$lib/getCookie.js";
+  let authedUser = writable({});
+
   export let data;
   let filters = [];
   let page = 0;
@@ -51,11 +57,19 @@
     const totalGoal = data.btcPrice * goal;
     return ((value / totalGoal) * 100).toFixed(2);
   }
+
+  onMount(async () => {
+    const req = await fetchData(
+      { authToken: getCookie("authToken") },
+      "https://solidaryswap.onrender.com/api/jwt-user"
+    );
+	authedUser.set(req.user);
+  });
 </script>
 
 <MainNavBar
   isOnEditPage={false}
-  userImage={data.authedUser ? data.authedUser.image : null}
+  userImage={$authedUser ? $authedUser.image : null}
 />
 <div class="flex w-full gap-8">
   <div class="flex flex-col p-4 w-1/4 gap-2">

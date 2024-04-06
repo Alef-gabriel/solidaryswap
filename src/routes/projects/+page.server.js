@@ -8,7 +8,7 @@ import {
   SECRET_PROJECT_TABLE_NAME,
 } from "$env/static/private";
 
-export const load = async ({ locals }) => {
+export const load = async () => {
   const fetchProjects = async () => {
     let originalPageNumber = 1;
     try {
@@ -33,18 +33,8 @@ export const load = async ({ locals }) => {
     }
   };
 
-  const getLocals = () => {
-    let authedUser = undefined;
-    if (locals.authedUser) {
-      authedUser = locals.authedUser;
-    }
-
-    return authedUser;
-  };
-
   return {
     projects: await fetchProjects(),
     btcPrice: await getBTCPrice(),
-    authedUser: getLocals(),
   };
 };
