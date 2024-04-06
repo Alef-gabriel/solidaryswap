@@ -10,13 +10,14 @@
   import LoadingAnimation from "$lib/components/LoadingAnimation.svelte";
   import { fetchData } from "$lib/fetchData.js";
   import BtcDollar from "$lib/components/BtcDollar.svelte";
+  import { getCookie } from "$lib/getCookie.js";
+  let authedUser = writable({});
 
   let principalSelectedCategory = writable();
   let principalSelectedSubCategory = "";
   let selectedCategory = writable();
   let selectedSubCategory = "";
   let loading = false;
-  export let data;
 
   let form = {
     title: "",
@@ -38,7 +39,7 @@
   const handleSubmit = async () => {
     loading = true;
     form.image = await w3uploadFile(form.image);
-    form.user_contract_id = data?.authedUser.id;
+    form.user_contract_id = $authedUser.id;
     if (form.video) {
       form.video = await w3uploadFile(form.video);
     }
@@ -54,7 +55,15 @@
     navigation.goto(`/edit/story?id=${res.id}`);
   };
 
-  onMount(() => {
+  onMount(async () => {
+    const req = await fetchData(
+      { authToken: getCookie("authToken") },
+      "https://solidaryswap.onrender.com/api/jwt-user"
+    );
+    authedUser.set(req.user);
+    if (!$authedUser) {
+      navigation.goto("/login");
+    }
     const image = document.getElementById("image");
     image.addEventListener("change", async (event) => {
       form.image = event.target.files[0];
@@ -293,7 +302,7 @@
       </p>
     </div>
     <div class="flex flex-col gap-8 w-3/4">
-		<BtcDollar bind:value={form.goal} />
-	</div>
+      <BtcDollar bind:value={form.goal} />
+    </div>
   </div>
 {/if}

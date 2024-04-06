@@ -1,9 +1,23 @@
 <script>
   import MainNavBar from "$lib/components/MainNavBar.svelte";
   import RoundProgress from "$lib/components/RoundProgress.svelte";
+  import { fetchData } from "$lib/fetchData.js";
+  import { getCookie } from "$lib/getCookie.js";
+  import { goto } from "$app/navigation";
+  import { onMount } from "svelte";
+
+  onMount(async () => {
+    const req = await fetchData(
+      { authToken: getCookie("authToken") },
+      "https://solidaryswap.onrender.com/api/jwt-user"
+    );
+    if (!req.user) {
+      goto("/login");
+    }
+  });
 </script>
 
-<MainNavBar isOnEditPage={true}/>
+<MainNavBar isOnEditPage={true} />
 <div class="flex flex-col p-8">
   <h2 class="text-2xl pb-4">Project overview</h2>
   <a href="/basics">
