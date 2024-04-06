@@ -25,7 +25,7 @@ export const load = async () => {
           }`
         )
         .all();
-      return results;
+      return JSON.stringify(results);
     } catch (err) {
       error(404, {
         message: "Contract Not deployed",

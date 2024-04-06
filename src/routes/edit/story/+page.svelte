@@ -64,13 +64,13 @@
         { data: cid },
         `https://solidaryswap.onrender.com/api/project/story/${id}`
       );
-      navigation.goto(`/projects/${res.id}`);
+      navigation.goto(`/projects/plan?id=${res.id}`);
     }
   };
 
   const handlePreview = async () => {
     if (id) {
-      navigation.goto(`/projects/${id}`);
+      navigation.goto(`/projects/plan?id=$${id}`);
     }
   };
 

@@ -8,48 +8,75 @@
   import { getCookie } from "$lib/getCookie.js";
   import BackerModal from "$lib/components/BackerModal.svelte";
   import CommentsSection from "$lib/components/CommentsSection.svelte";
+  import { contractBalance } from "$lib/contractBalance.js";
   import ConfirmationModal from "$lib/components/ConfirmationModal.svelte";
   import LoadingAnimation from "$lib/components/LoadingAnimation.svelte";
   import { getBTCPrice, fetchMidia, formatUSDPrice } from "$lib/ethUltils.js";
   import FaqsComponent from "../../../lib/components/FaqsComponent.svelte";
-  export let data;
+  import { page } from "$app/stores";
+  const params = $page.url.searchParams.get("id");
 
-  const project = data.project[0];
-  const owner = data.owner[0];
+  let project = writable({});
+  let owner = writable({});
+  let pageLoad = writable({});
   let storyHtml = writable("");
-  let video = null;
+  let video = writable();
   let campaign = true;
-  let image;
+  let image = writable("");
   let backed = false;
   let confirmation = false;
   let loading = true;
-  let page = "campaign";
+  let pageInfo = "campaign";
   let authedUser = writable({});
-  let balance;
-  let goal;
+  let balance = writable();
+  let goal = writable();
 
   async function fetchStory(link) {
-    const response = await fetch(`https://${link}.ipfs.w3s.link/`);
-    return await response.json();
+    if (link && link != "null") {
+      const response = await fetch(`https://${link}.ipfs.w3s.link/`);
+      return await response.json();
+    }
+    return null;
   }
 
   onMount(async () => {
+    const requests = await fetchData(
+      { id: params },
+      "https://solidaryswap.onrender.com/api/id-project"
+    );
+    project.set(requests.res[0]);
+    const res = await fetchData(
+      { userId: $project.user_contract_id },
+      "https://solidaryswap.onrender.com/api/user"
+    );
+    owner.set(res.user);
+    pageLoad.set({
+      backers: await fetchData(
+        { contractId: $project.project_contract_id },
+        "https://solidaryswap.onrender.com/api/backers"
+      ),
+      comments: await fetchData(
+        { tableName: $project.comments_table_name },
+        "https://solidaryswap.onrender.com/api/comments"
+      ),
+      balance: await contractBalance($project.project_contract_id),
+    });
     const req = await fetchData(
       { authToken: getCookie("authToken") },
       "https://solidaryswap.onrender.com/api/jwt-user"
     );
     authedUser.set(req.user);
     const ethPrice = await getBTCPrice();
-    balance = formatUSDPrice(ethPrice * data.balance);
-    goal = formatUSDPrice(project.goal * ethPrice);
+    balance.set(formatUSDPrice(ethPrice * $pageLoad.balance));
+    goal.set(formatUSDPrice($project.goal * ethPrice));
 
     loading = true;
-    if (project.video != "null") {
-      video = await fetchMidia(project.video);
+    if ($project.video != "null") {
+      video.set(await fetchMidia($project.video));
     }
-    image = await fetchMidia(project.image);
+    image.set(await fetchMidia($project.image));
     loading = false;
-    storyHtml.set(await fetchStory(project.data));
+    storyHtml.set(await fetchStory($project.data));
   });
 </script>
 
@@ -59,45 +86,47 @@
 />
 <BackerModal
   bind:isActivated={backed}
-  {project}
+  project={$project}
   userId={$authedUser.id}
   bind:isConfirmed={confirmation}
 />
 <ConfirmationModal phrase=" backer this project" show={confirmation} />
 <LoadingAnimation bind:isLoading={loading} />
-{#if data && !loading}
+{#if $project && !loading}
   <div class="bg-gray-50 flex flex-col">
     <div class="flex flex-col justify-center p-8 items-center w-full h-36">
-      <h1 class="text-3xl pb-4">{project.title}</h1>
+      <h1 class="text-3xl pb-4">{$project.title}</h1>
       <p class="text-gray-400 text-lg w-3/4 text-center">
-        {project.description}
+        {$project.description}
       </p>
     </div>
     <div class="flex gap-8 w-full h-86 p-8">
       <div class="flex">
         <!-- if have video do video else do image -->
-        {#if video}
+        {#if $video}
           <video width="750" height="450" controls>
-            <source src={video} type="video/mp4" />
+            <source src={$video} type="video/mp4" />
             <track kind="captions" srclang="en" label="english_captions" />
           </video>
         {:else}
-          <img id="pic-bunner" src={image} alt="" width="750" height="450" />
+          <img id="pic-bunner" src={$image} alt="" width="750" height="450" />
         {/if}
       </div>
       <div class="flex flex-col gap-6 w-2/6">
         <div class="w-full h-2.5 bg-gray-200">
           <div
             class="h-2.5 bg-violet-600"
-            style="width: {(balance / goal) * 100}%"
+            style="width: {($balance / $goal) * 100}%"
           ></div>
         </div>
         <div>
-          <h2 class="text-3xl text-violet-600 font-semibold">US$ {balance}</h2>
-          <p class="text-gray-500">pledged of US$ {goal} goal</p>
+          <h2 class="text-3xl text-violet-600 font-semibold">US$ {$balance}</h2>
+          <p class="text-gray-500">pledged of US$ {$goal} goal</p>
         </div>
         <div>
-          <h2 class="text-3xl text-violet-600 font-semibold">{data.backers}</h2>
+          <h2 class="text-3xl text-violet-600 font-semibold">
+            {$pageLoad.backers.backersCount}
+          </h2>
           <p class="text-gray-500">backers</p>
         </div>
         <div class="flex flex-col gap-4">
@@ -124,16 +153,16 @@
     backerFunction={() => {
       backed = true;
     }}
-    bind:pagination={page}
+    bind:pagination={pageInfo}
   />
-  {#if page == "comments"}
+  {#if pageInfo == "comments"}
     <CommentsSection
       id="comments"
-      initialComments={data.comments}
+      initialComments={$pageLoad.comments.res}
       userId={$authedUser.id}
-      tableName={project.comments_table_name}
+      tableName={$project.comments_table_name}
     />
-  {:else if page == "campaign"}
+  {:else if pageInfo == "campaign"}
     <div id="campaign" class="flex w-full">
       <div class="sticky top-24 flex flex-col gap-4 w-1/4 p-4 h-56">
         <a
@@ -170,7 +199,7 @@
       </div>
       <div class="sticky top-24 flex flex-col w-1/4 p-4 h-56">
         <div class="w-full h-46 flex flex-col gap-4 border p-4">
-          {#await fetchMidia(owner.image) then userImage}
+          {#await fetchMidia($owner.image) then userImage}
             {#if userImage}
               <img
                 id="pic-user-image"
@@ -184,13 +213,13 @@
             {/if}
           {/await}
           <div>
-            <p class="text-lg text-gray-600 font-bold">{owner.name}</p>
+            <p class="text-lg text-gray-600 font-bold">{$owner.name}</p>
             <!-- <p class="text-gray-400">85 created . 165 backed</p> -->
           </div>
           <div>
             <p class="text-gray-400">
-              {#if owner.biography}
-                {owner.biography}
+              {#if $owner.biography}
+                {$owner.biography}
               {:else}
                 User don't have biography
               {/if}
@@ -199,8 +228,10 @@
         </div>
       </div>
     </div>
-  {:else if page == "faq"}
-    <FaqsComponent faqs={$storyHtml.faqs} />
+  {:else if pageInfo == "faq"}
+    {#if $storyHtml}
+      <FaqsComponent faqs={$storyHtml.faqs} />
+    {/if}
   {/if}
 {/if}
 

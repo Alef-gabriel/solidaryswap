@@ -21,7 +21,7 @@ const config = {
         "/edit/people",
         "/edit/story",
         "/projects/actions/[projectId]",
-        "/projects/[id]",
+        "/projects/plan",
       ],
       handleHttpError: ({ path, message }) => {
         // Check if the error is related to the /projects/[id]/ route

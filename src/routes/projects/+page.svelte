@@ -9,6 +9,7 @@
   import { fetchData } from "$lib/fetchData.js";
   import { getCookie } from "$lib/getCookie.js";
   let authedUser = writable({});
+  let projects = writable({});
 
   export let data;
   let filters = [];
@@ -63,7 +64,8 @@
       { authToken: getCookie("authToken") },
       "https://solidaryswap.onrender.com/api/jwt-user"
     );
-	authedUser.set(req.user);
+    authedUser.set(req.user);
+    projects.set(JSON.parse(data.projects));
   });
 </script>
 
@@ -116,9 +118,9 @@
   </div>
   <div class="flex flex-col gap-2 p-4 w-3/4">
     <!-- each in projects to get all -->
-    {#if data}
-      {#each data.projects as project}
-        <a href="/projects/{project.id}">
+    {#if $projects}
+      {#each $projects as project}
+        <a href="/projects/plan?id={project.id}">
           <div class="flex items-start p-4 shadow">
             {#await fetchMidia(project.image) then image}
               <img id="pic-bunner" src={image} alt="" width="96" height="96" />
