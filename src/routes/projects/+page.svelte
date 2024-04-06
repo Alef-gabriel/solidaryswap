@@ -8,12 +8,13 @@
   import { writable } from "svelte/store";
   import { fetchData } from "$lib/fetchData.js";
   import { getCookie } from "$lib/getCookie.js";
+  import { getBTCPrice } from "$lib/ethUltils.js";
   let authedUser = writable({});
   let projects = writable({});
+  let btcPrice = writable();
 
-  export let data;
   let filters = [];
-  let page = 0;
+  let page = 1;
 
   const handlePageChange = (newPageNumber) => {
     const currentUrl = window.location.pathname + window.location.search;
@@ -51,11 +52,11 @@
 
   async function balanceInBtc(contractId) {
     const btcBalance = await contractBalance(contractId);
-    return data.btcPrice * btcBalance;
+    return $btcPrice * btcBalance;
   }
 
   function balanceToPercent(value, goal) {
-    const totalGoal = data.btcPrice * goal;
+    const totalGoal = $btcPrice * goal;
     return ((value / totalGoal) * 100).toFixed(2);
   }
 
@@ -65,7 +66,12 @@
       "https://solidaryswap.onrender.com/api/jwt-user"
     );
     authedUser.set(req.user);
-    projects.set(JSON.parse(data.projects));
+    const pjreq = await fetchData(
+      { originalPageNumber: page },
+      "https://solidaryswap.onrender.com/api/all-projects"
+    );
+    projects.set(pjreq.res);
+    btcPrice.set(await getBTCPrice());
   });
 </script>
 
