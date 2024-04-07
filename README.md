@@ -79,7 +79,7 @@ SolidaritySwap connects projects with a diverse community of investors from arou
 <strong>Fleek for Secure and Easy Deployment:</strong> With Fleek, we ensure secure and hassle-free deployment of our application, streamlining the deployment process and enhancing overall operational efficiency. This allows us to focus on delivering value to our users without worrying about deployment complexities.
 </li>
 
-<h1>Disclaimer:</h1>
+<h1>Setup Instructions:</h1>
 <h3>Branch:</h3>
 <strong>Master:</strong> Combines both front end and backend functionalities.
 <br>
