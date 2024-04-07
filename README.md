@@ -91,7 +91,7 @@ SolidaritySwap connects projects with a diverse community of investors from arou
 <li><code>npm run dev</code></li>
 <li>Utilize Hardhat wallet or MetaMask to interact with the contract.</li>
 
-<strong>front:</strong><br>
+<strong>front:</strong>
 Front end only with a static adapter.
 
 <strong>Svelte-Back:</strong>
