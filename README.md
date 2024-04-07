@@ -78,3 +78,21 @@ SolidaritySwap connects projects with a diverse community of investors from arou
 <li>
 <strong>Fleek for Secure and Easy Deployment:</strong> With Fleek, we ensure secure and hassle-free deployment of our application, streamlining the deployment process and enhancing overall operational efficiency. This allows us to focus on delivering value to our users without worrying about deployment complexities.
 </li>
+
+<h1>Disclaimer:</h1>
+<h3>Branch:</h3>
+<strong>Master:</strong> Combines both front end and backend functionalities.
+<br>
+<strong>Local Use:</strong>
+<li>Install <a href="https://docs.tableland.xyz/local-tableland#installation--setup">local-tableland</a></li>
+<li><code>npx hardhat run scripts/deploy.js</code></li>
+
+<li>Add items in the '.env' file.</li>
+<li><code>npm run dev</code></li>
+<li>Utilize Hardhat wallet or MetaMask to interact with the contract.</li>
+
+<strong>front:</strong><br>
+Front end only with a static adapter.
+
+<strong>Svelte-Back:</strong>
+Operates on the Filecoin testnet network (may experience some delays) and solely interacts with the contract.
